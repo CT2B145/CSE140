@@ -12,7 +12,7 @@ class AIPlayer:
         self.player_string = 'Player {}:ai'.format(player_number)
 
     #first empty row that is nearest
-    def get_empty_row_index(self, board, col):
+    def get_closet_empty_row(self, board, col):
         # placement of where it is on the board
         row_values = list(board[:, col])
         # any option not use yet
@@ -31,11 +31,12 @@ class AIPlayer:
             # go throught each col starting from the bottom
             # going through every row
             # returns value that is empty, the closest empty
-            row_num = self.get_empty_row_index(board, col)
+            row_num = self.get_closet_empty_row(board, col)
             # well if the rows actually exists
             if row_num != -1:
                 possibleActions.append((row_num, col))
-                #array of tuples    
+                #array of tuples
+        return possibleActions   
 
     def get_alpha_beta_move(self, board):
         """
@@ -79,40 +80,59 @@ class AIPlayer:
         """
         # i guess do this for now until we get worse
         depth = 0 
-        if self.terminal_test(board) or depth == ExpectedMaxDepth:
-            return self.evaluation_function(board)
-        return self.expectimax_max_value(board, depth) 
+        return self.bestValueWalmart(board, depth, True)
 
 
         raise NotImplementedError('Whoops I don\'t know what to do')
 
-
+    def bestValueWalmart(self, board, depth, playerType):
+        AnIdiot = True
+        hammond = playerType
+        if self.terminal_test(board) or depth == ExpectedMaxDepth:
+            return self.evaluation_function(board)
+        return self.expectimax_max_value(board, depth) if hammond is AnIdiot else self.expectimax_exp_value(board, depth)
 
     def expectimax_max_value(self, board, depth):
         v = -999999999
+        # get all actions
         actions = self.actions(board)
+         # set action to be the first in the array, because of the max function needs a baseline
         action_baseline = actions[0]
         #    actions  = [()] 
+        # all actions here are the head , or possible methods of advancement
+        # eval for every single action sin actions
+        #placing the piece all the row possiblities,  and get the ultilty
         for action in actions:
-             board[action[0]][action[1]] = self.player_number
-             exp_v = self.expectimax_max_value(board, depth+1)
-             if exp_v > v:
-                v = exp_v
+            # set the action in the board, set it equal to the player number 0 1 2 
+            board[action[0]][action[1]] = self.player_number
+             # determine the value, by the amount of depth we need to be, this is recursive, 
+            # DFS kinda of thing, 
+            # three moves into the furure
+            #take the value, evalulate function and compare
+            exp_v = self.bestValueWalmart(board, depth+1, False)
+            if exp_v > v:
                 action_baseline = action
-
-         # # reset the board after we make the prediction
-         # we havent done that move yet       
-         board[action[0]][action[1]] = 0   # reset the board back everytime we make a eval
-        
-
+                v = exp_v
+            # # reset the board after we make the prediction
+            # we havent done that move yet       
+            board[action[0]][action[1]] = 0   # reset the board back everytime we make a eval
         return v
-        # a_
 
-
-
+    # handling the random player
     def expectimax_exp_value(self, board, depth):
-
-
+        v = 0
+        # this means the value at the current state, the best acheivle outcome ultilty
+        actions = self.actions(board)
+        for action in actions:
+            board[action[0]][action[1]] = self.player_number
+            # value remember means the best achievable outcome from the succ
+            value = self.bestValueWalmart(board, depth+1, True)
+             # the TA gave this to students in the Summer session apparently?
+             # , this the prob funtion
+            # each action has the same prob to be played, think of connect 4 logic   
+            v += (1.0/(len(actions)))*value
+        return v
+            
 
 
 
@@ -133,8 +153,14 @@ class AIPlayer:
         RETURNS:
         The utility value for the current board
         """
-       
-       
+       # think of windows , 4 to win
+        # @ of alll the moves that ar possible, which are the best ones
+
+        # temp place one at everyone, everytime i place the piece, im going to evalutet  what my ultiy is,
+        # if i place my piece, and it reutrn connect 4 amazin move
+
+        
+
         return 0
 
 
