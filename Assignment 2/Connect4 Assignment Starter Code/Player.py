@@ -1,18 +1,47 @@
 import numpy as np
 
 class AIPlayer:
+
+    # apparently there is a temp var we set
+    ExpectedMaxDepth = 1
+
+
     def __init__(self, player_number):
         self.player_number = player_number
         self.type = 'ai'
         self.player_string = 'Player {}:ai'.format(player_number)
 
+    #first empty row that is nearest
+    def get_empty_row_index(self, board, col):
+        # placement of where it is on the board
+        row_values = list(board[:, col])
+        # any option not use yet
+        if 0 in row_values:
+            # get the row with the value in it but the position where there is a zero value
+            return 6 - row_values[::-1].index(0) - 1
+        else:
+            return -1
+
+    # Returns all possible actions 
+    def actions(self, board):
+        possibleActions = []
+        cols = [0 for i in range(6)]
+        #which row is the first empty starting from the bottom
+        for col in cols:
+            # go throught each col starting from the bottom
+            # going through every row
+            # returns value that is empty, the closest empty
+            row_num = self.get_empty_row_index(board, col)
+            # well if the rows actually exists
+            if row_num != -1:
+                possibleActions.append((row_num, col))
+                #array of tuples    
+
     def get_alpha_beta_move(self, board):
         """
         Given the current state of the board, return the next move based on
         the alpha-beta pruning algorithm
-
         This will play against either itself or a human player
-
         INPUTS:
         board - a numpy array containing the state of the board using the
                 following encoding:
@@ -22,20 +51,20 @@ class AIPlayer:
                 - spaces that are unoccupied are marked as 0
                 - spaces that are occupied by player 1 have a 1 in them
                 - spaces that are occupied by player 2 have a 2 in them
-
         RETURNS:
         The 0 based index of the column that represents the next move
         """
+
+
+
         raise NotImplementedError('Whoops I don\'t know what to do')
 
     def get_expectimax_move(self, board):
         """
         Given the current state of the board, return the next move based on
         the expectimax algorithm.
-
         This will play against the random player, who chooses any valid move
         with equal probability
-
         INPUTS:
         board - a numpy array containing the state of the board using the
                 following encoding:
@@ -45,11 +74,44 @@ class AIPlayer:
                 - spaces that are unoccupied are marked as 0
                 - spaces that are occupied by player 1 have a 1 in them
                 - spaces that are occupied by player 2 have a 2 in them
-
         RETURNS:
         The 0 based index of the column that represents the next move
         """
+        # i guess do this for now until we get worse
+        depth = 0 
+        if self.terminal_test(board) or depth == ExpectedMaxDepth:
+            return self.evaluation_function(board)
+        return self.expectimax_max_value(board, depth) 
+
+
         raise NotImplementedError('Whoops I don\'t know what to do')
+
+
+
+    def expectimax_max_value(self, board, depth):
+        v = -999999999
+        actions = self.actions(board)
+        action_baseline = actions[0]
+        #    actions  = [()] 
+        for action in actions:
+             board[action[0]][action[1]] = self.player_number
+             exp_v = self.expectimax_max_value(board, depth+1)
+             if exp_v > v:
+                v = exp_v
+                action_baseline = action
+
+         # # reset the board after we make the prediction
+         # we havent done that move yet       
+         board[action[0]][action[1]] = 0   # reset the board back everytime we make a eval
+        
+
+        return v
+        # a_
+
+
+
+    def expectimax_exp_value(self, board, depth):
+
 
 
 
@@ -68,7 +130,6 @@ class AIPlayer:
                 - spaces that are unoccupied are marked as 0
                 - spaces that are occupied by player 1 have a 1 in them
                 - spaces that are occupied by player 2 have a 2 in them
-
         RETURNS:
         The utility value for the current board
         """
@@ -87,7 +148,6 @@ class RandomPlayer:
         """
         Given the current board state select a random column from the available
         valid moves.
-
         INPUTS:
         board - a numpy array containing the state of the board using the
                 following encoding:
@@ -97,7 +157,6 @@ class RandomPlayer:
                 - spaces that are unoccupied are marked as 0
                 - spaces that are occupied by player 1 have a 1 in them
                 - spaces that are occupied by player 2 have a 2 in them
-
         RETURNS:
         The 0 based index of the column that represents the next move
         """
@@ -118,7 +177,6 @@ class HumanPlayer:
     def get_move(self, board):
         """
         Given the current board state returns the human input for next move
-
         INPUTS:
         board - a numpy array containing the state of the board using the
                 following encoding:
@@ -128,7 +186,6 @@ class HumanPlayer:
                 - spaces that are unoccupied are marked as 0
                 - spaces that are occupied by player 1 have a 1 in them
                 - spaces that are occupied by player 2 have a 2 in them
-
         RETURNS:
         The 0 based index of the column that represents the next move
         """
@@ -145,4 +202,3 @@ class HumanPlayer:
             move = int(input('Enter your move: '))
 
         return move
-
