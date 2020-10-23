@@ -38,6 +38,58 @@ class AIPlayer:
                 #array of tuples
         return possibleActions   
 
+    # checks if the game is done via a 4 line,  returns a bool
+    # same as the eval function logic ugh
+    def terminal_test(self, board):
+        # check which player we are on
+        if self.player_number is 2:
+            opponent_num = 1
+        else: 
+            opponent_num = 2
+        #left and right rows
+        for i in range(6):
+            row = board[i]
+            for col in range(7-3):
+                vision = list(row[col:col+4]) # we want to check right 4
+                me = vision.count(self.player_number)
+                oppsite = vision.count(opponent_num)
+                # 
+                if me == 4 or oppsite == 4:
+                    return True
+        # check for the columns
+         # 7 col, so check 
+        for i in range(7):
+            col = board[list(board[:, i])]
+            for row in range(6-3):
+                vision = list(col[row:row+4]) # we want to check right 4
+                me = vision.count(self.player_number)
+                oppsite = vision.count(opponent_num)
+                # 
+                if me == 4 or oppsite == 4:
+                    return True
+        # diagonial left to right down
+        for c in range(7-3):
+            col = board[c]
+            for r in range(6-3):
+                vision = [board[r][c], board[r+1][c+1], board[r+2][c+2], board[r+3][c+3]] # we want to check right 4
+                me = vision.count(self.player_number)
+                oppsite = vision.count(opponent_num)
+                # 
+                if me == 4 or oppsite == 4:
+                    return True
+        #diagonal left to right up
+        for c in range(7-3):
+            col = board[c]
+            for r in range(6-3):
+                vision = [board[r][c], board[r-1][c+1], board[r-2][c+2], board[r-3][c+3]] # we want to check right 4
+                me = vision.count(self.player_number)
+                oppsite = vision.count(opponent_num)
+                if me == 4 or oppsite == 4:
+                    return True
+        return False
+        
+
+
     def get_alpha_beta_move(self, board):
         """
         Given the current state of the board, return the next move based on
@@ -84,6 +136,9 @@ class AIPlayer:
          and then factors it into its calculation so this back and forth prediction keeps going till we run out of depth
 
         """
+        # i was told to do this.... uhhh????
+        ExpectedMaxDepth = 2
+
         # i guess do this for now until we get worse
         depth = 0 
         # we are always going to start out with max regardless
@@ -142,8 +197,19 @@ class AIPlayer:
             # each action has the same prob to be played, think of connect 4 logic   
             v += (1.0/(len(actions)))*value
         return v
-            
 
+
+
+    #      based if this for calculations https://www.youtube.com/watch?v=y7AKtWGOPAE  
+    def check_window(self, current, empty, opponent):    
+        utility = 0
+        if current == 3 and empty == 1:
+            utility += 40
+        elif current == 2 and empty == 2:
+            utility += 10
+        if opponent == 3 and empty == 1:
+            utility -= 40
+        return utility
 
     def evaluation_function(self, board):
         """
@@ -162,18 +228,51 @@ class AIPlayer:
         RETURNS:
         The utility value for the current board
         """
+
+        # check which player we are on
+        if self.player_number is 2:
+            opponent_num = 1
+        else: 
+            opponent_num = 2
+
        # think of windows , 4 to win
         # @ of alll the moves that ar possible, which are the best ones
 
         # temp place one at everyone, everytime i place the piece, im going to evalutet  what my ultiy is,
         # if i place my piece, and it reutrn connect 4 amazin move
-
+        
+        BEST = 100000000
         # 6 rows, so check 
-        for i in range(len(6)):
+        for i in range(6):
+            row = board[i]
+            for col in range(7-3):
+                vision = list(row[col:col+4]) # we want to check right 4
+                me = vision.count(self.player_number)
+                oppsite = vision.count(opponent_num)
+                empty = vision.count(0)
+                # count the number of pucks we see so far
+                if me == 4:
+                    return (BEST)
+                else:
+                    ulitily += self.check_window(me, empty, oppsite)
 
 
+        # check for the columns
+         # 7 col, so check 
+        for i in range(7):
+            col = board[i]
+            for row in range(6-3):
+                vision = list(col[row:row+4]) # we want to check right 4
+                me = vision.count(self.player_number)
+                oppsite = vision.count(opponent_num)
+                empty = vision.count(0)
+                # count the number of pucks we see so far
+                if me == 4:
+                    return (BEST)
+                else:
+                    ulitily += self.check_window(me, empty, oppsite)
 
-        return 0
+        return ulitily
 
 
 class RandomPlayer:
