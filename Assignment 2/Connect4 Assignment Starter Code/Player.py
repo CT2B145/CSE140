@@ -77,13 +77,19 @@ class AIPlayer:
                 - spaces that are occupied by player 2 have a 2 in them
         RETURNS:
         The 0 based index of the column that represents the next move
+
+        Expectimax starts out with max value cuz a. top of the tree, b. we want the best move for the AI.
+         Then it will factor in the expected move that the AI opponent will make, in exp_value. In exp_value, 
+         it also does the same, by looking at every action and seeing the values possible for our AI.... 
+         and then factors it into its calculation so this back and forth prediction keeps going till we run out of depth
+
         """
         # i guess do this for now until we get worse
         depth = 0 
+        # we are always going to start out with max regardless
         return self.bestValueWalmart(board, depth, True)
 
-
-        raise NotImplementedError('Whoops I don\'t know what to do')
+        # raise NotImplementedError('Whoops I don\'t know what to do')
 
     def bestValueWalmart(self, board, depth, playerType):
         AnIdiot = True
@@ -107,8 +113,9 @@ class AIPlayer:
             board[action[0]][action[1]] = self.player_number
              # determine the value, by the amount of depth we need to be, this is recursive, 
             # DFS kinda of thing, 
-            # three moves into the furure
+            # three moves into the furure for example
             #take the value, evalulate function and compare
+            # also we switch functions since we are taking the avg of the two functions
             exp_v = self.bestValueWalmart(board, depth+1, False)
             if exp_v > v:
                 action_baseline = action
@@ -124,8 +131,11 @@ class AIPlayer:
         # this means the value at the current state, the best acheivle outcome ultilty
         actions = self.actions(board)
         for action in actions:
-            board[action[0]][action[1]] = self.player_number
+            # basically, this is some funky math in order to get it to be the opposite everytime
+            # 2 * 2 mod 3  =1 the 1 * 2 mode 3  =  2
+            board[action[0]][action[1]] = (self.player_number*2)% 3
             # value remember means the best achievable outcome from the succ
+            # and we factor in our calcuation here to what the opponent may think of us
             value = self.bestValueWalmart(board, depth+1, True)
              # the TA gave this to students in the Summer session apparently?
              # , this the prob funtion
@@ -133,7 +143,6 @@ class AIPlayer:
             v += (1.0/(len(actions)))*value
         return v
             
-
 
 
     def evaluation_function(self, board):
@@ -159,7 +168,10 @@ class AIPlayer:
         # temp place one at everyone, everytime i place the piece, im going to evalutet  what my ultiy is,
         # if i place my piece, and it reutrn connect 4 amazin move
 
-        
+        # 6 rows, so check 
+        for i in range(len(6)):
+
+
 
         return 0
 
