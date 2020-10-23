@@ -40,51 +40,33 @@ class AIPlayer:
 
     # checks if the game is done via a 4 line,  returns a bool
     # same as the eval function logic ugh
+    #  https://www.youtube.com/watch?v=MMLtza3CZFM more diagnoal horror
     def terminal_test(self, board):
-        # check which player we are on
-        if self.player_number is 2:
-            opponent_num = 1
-        else: 
-            opponent_num = 2
         #left and right rows
-        for i in range(6):
-            row = board[i]
-            for col in range(7-3):
-                vision = list(row[col:col+4]) # we want to check right 4
-                me = vision.count(self.player_number)
-                oppsite = vision.count(opponent_num)
-                # 
-                if me == 4 or oppsite == 4:
+        for r in range(6):
+            row = board[r]
+            for c in range(7-3): # counts all the groups of 4
+                vision = list(row[c:c+4])
+                if vision.count(self.player_number) == 4 or vision.count((self.player_number * 2) % 3) == 4:
                     return True
-        # check for the columns
-         # 7 col, so check 
-        for i in range(7):
-            col = board[list(board[:, i])]
-            for row in range(6-3):
-                vision = list(col[row:row+4]) # we want to check right 4
-                me = vision.count(self.player_number)
-                oppsite = vision.count(opponent_num)
-                # 
-                if me == 4 or oppsite == 4:
-                    return True
-        # diagonial left to right down
-        for c in range(7-3):
-            col = board[c]
+        # up and down vertical check
+        for c in range(7):
+            row_array = list(board[:, c])
             for r in range(6-3):
-                vision = [board[r][c], board[r+1][c+1], board[r+2][c+2], board[r+3][c+3]] # we want to check right 4
-                me = vision.count(self.player_number)
-                oppsite = vision.count(opponent_num)
-                # 
-                if me == 4 or oppsite == 4:
+                vision = row_array[r:r+4]
+                if vision.count(self.player_number) == 4 or vision.count((self.player_number * 2) % 3) == 4:
                     return True
-        #diagonal left to right up
+        # diagonal left to right down
         for c in range(7-3):
-            col = board[c]
             for r in range(6-3):
-                vision = [board[r][c], board[r-1][c+1], board[r-2][c+2], board[r-3][c+3]] # we want to check right 4
-                me = vision.count(self.player_number)
-                oppsite = vision.count(opponent_num)
-                if me == 4 or oppsite == 4:
+                vision = [board[r][c], board[r+1][c+1], board[r+2][c+2], board[r+3][c+3]]
+                if vision.count(self.player_number) == 4 or vision.count((self.player_number * 2) % 3) == 4:
+                    return True
+        # # #diagonal left to right up
+        for c in range(7-3):
+            for r in range(3, 6):
+                vision = [board[r][c], board[r-1][c+1], board[r-2][c+2], board[r-3][c+3]]
+                if vision.count(self.player_number) == 4 or vision.count((self.player_number * 2) % 3) == 4:
                     return True
         return False
         
@@ -136,20 +118,22 @@ class AIPlayer:
          and then factors it into its calculation so this back and forth prediction keeps going till we run out of depth
 
         """
-        # i was told to do this.... uhhh????
-        ExpectedMaxDepth = 2
 
         # i guess do this for now until we get worse
         depth = 0 
         # we are always going to start out with max regardless
-        return self.bestValueWalmart(board, depth, True)
+        # remember get that stupid column apparently
+        return self.bestValueWalmart(board, depth, True)[1][1]
 
         # raise NotImplementedError('Whoops I don\'t know what to do')
 
     def bestValueWalmart(self, board, depth, playerType):
+        # i was told to do this.... uhhh????
+        ExpectedMaxDepth = 2
         AnIdiot = True
         hammond = playerType
         if self.terminal_test(board) or depth == ExpectedMaxDepth:
+            print(self.evaluation_function(board))
             return self.evaluation_function(board)
         return self.expectimax_max_value(board, depth) if hammond is AnIdiot else self.expectimax_exp_value(board, depth)
 
@@ -178,7 +162,8 @@ class AIPlayer:
             # # reset the board after we make the prediction
             # we havent done that move yet       
             board[action[0]][action[1]] = 0   # reset the board back everytime we make a eval
-        return v
+
+        return (v, action_baseline)
 
     # handling the random player
     def expectimax_exp_value(self, board, depth):
@@ -240,8 +225,8 @@ class AIPlayer:
 
         # temp place one at everyone, everytime i place the piece, im going to evalutet  what my ultiy is,
         # if i place my piece, and it reutrn connect 4 amazin move
-        
-        BEST = 100000000
+        ulitily = 0
+        BEST = 100000
         # 6 rows, so check 
         for i in range(6):
             row = board[i]
@@ -260,7 +245,7 @@ class AIPlayer:
         # check for the columns
          # 7 col, so check 
         for i in range(7):
-            col = board[i]
+            col = list(board[:, i])
             for row in range(6-3):
                 vision = list(col[row:row+4]) # we want to check right 4
                 me = vision.count(self.player_number)
@@ -271,6 +256,8 @@ class AIPlayer:
                     return (BEST)
                 else:
                     ulitily += self.check_window(me, empty, oppsite)
+        
+
 
         return ulitily
 
