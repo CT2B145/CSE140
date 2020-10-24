@@ -89,7 +89,45 @@ class AIPlayer:
         RETURNS:
         The 0 based index of the column that represents the next move
         """
+        return self.min_value(board,10000000, -10000000, depth)[1][1]
 
+    def min_value(self, board, alpha, beta, depth):
+        if self.terminal_test(board) or depth == ExpectedMaxDepth:
+            print(self.evaluation_function(board))
+            return self.evaluation_function(board)
+        return self.expectimax_max_value(board, depth) if hammond is AnIdiot else self.expectimax_exp_value(board, depth)
+
+    
+    
+    
+    def max_value(self, board, alpha, beta, depth):
+        v = -100000000
+        if self.terminal_test(board) or depth == ExpectedMaxDepth:
+            print(self.evaluation_function(board))
+            return self.evaluation_function(board)
+        # get all actions
+        actions = self.actions(board)
+         # set action to be the first in the array, because of the max function needs a baseline
+        action_baseline = actions[0]
+        for action in actions:
+            # always set the board
+            board[actions[0]][actions[1]] = self.player_number
+            # need to seperate since well... max() doesnt allow us to see if one is greater than other for actions
+            minV = self.min_value(board, alpha, beta, depth+1)
+            if (v <= minV[0])
+                action_baseline = action
+                v = minV[0]
+            if v >= beta:
+                #WE DONT NEED TO USE THIS, STOP!!!
+                board[actions[0]][actions[1]] = 0
+                # STOP!!! IGNORE, THIS IS THE PRUNE, NO NEED TO KEEP LOOKING!!
+                return (v, action)
+            alpha = max(alpha, v)
+            board[actions[0]][actions[1]] = 0
+
+        return (v,action_baseline)
+
+        # return self.expectimax_max_value(board, depth) if hammond is AnIdiot else self.expectimax_exp_value(board, depth)
 
 
         raise NotImplementedError('Whoops I don\'t know what to do')
@@ -179,7 +217,7 @@ class AIPlayer:
              # the TA gave this to students in the Summer session apparently?
              # , this the prob funtion, but yea look at the slides, they make sense in this case
             # each action has the same prob to be played, think of connect 4 logic. cuz we cannot say what exact move the person will take
-            v += (1.0/(len(actions)))*value
+            v += (1.0/(len(actions)))*value[0] # also check the type, since max returns a tuple, so get the first not the second item
         return v
 
 
