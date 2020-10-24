@@ -15,6 +15,7 @@ class AIPlayer:
     def get_closet_empty_row(self, board, col):
         # placement of where it is on the board
         row_values = list(board[:, col])
+        print(row_values, "row values")
         # any option not use yet
         if 0 in row_values:
             # get the row with the value in it but the position where there is a zero value
@@ -25,14 +26,18 @@ class AIPlayer:
     # Returns all possible actions that we can take from the empty positions
     def actions(self, board):
         possibleActions = []
-        cols = [0 for i in range(7)]
+        # HAS TO BE COLUMN NUMBERS YOU NITWITED NINE PIN
+        cols = [0, 1, 2, 3, 4, 5 ,6 ]
+        print(cols, "cols")
         #which row is the first empty starting from the bottom
         for col in cols:
+            
             # go throught each col starting from the bottom
             # going through every row
             # returns value that is empty, the closest empty
             row_num = self.get_closet_empty_row(board, col)
             # well if the rows actually exists
+            print(row_num, "row_num")
             if row_num != -1:
                 possibleActions.append((row_num, col))
                 #array of tuples
@@ -98,6 +103,7 @@ class AIPlayer:
         # get all actions
         actions = self.actions(board)
          # set action to be the first in the array, because of the max function needs a baseline
+        print(actions, "min")
         action_baseline = actions[0]
         if self.terminal_test(board) or depth == ExpectedMaxDepth:
             print(self.evaluation_function(board))
@@ -127,6 +133,7 @@ class AIPlayer:
         ExpectedMaxDepth = 2
         # get all actions
         actions = self.actions(board)
+        print(actions, " max")
          # set action to be the first in the array, because of the max function needs a baseline
         action_baseline = actions[0]
         if self.terminal_test(board) or depth == ExpectedMaxDepth:
