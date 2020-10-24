@@ -25,7 +25,7 @@ class AIPlayer:
     # Returns all possible actions that we can take from the empty positions
     def actions(self, board):
         possibleActions = []
-        cols = [0 for i in range(6)]
+        cols = [0 for i in range(7)]
         #which row is the first empty starting from the bottom
         for col in cols:
             # go throught each col starting from the bottom
@@ -93,15 +93,15 @@ class AIPlayer:
         return self.min_value(board,10000000, -10000000, depth)[1][1]
 
     def min_value(self, board, alpha, beta, depth):
-        v = -100000000
+        v = 100000000
         ExpectedMaxDepth = 2
-        if self.terminal_test(board) or depth == ExpectedMaxDepth:
-            print(self.evaluation_function(board))
-            return self.evaluation_function(board)
         # get all actions
         actions = self.actions(board)
          # set action to be the first in the array, because of the max function needs a baseline
         action_baseline = actions[0]
+        if self.terminal_test(board) or depth == ExpectedMaxDepth:
+            print(self.evaluation_function(board))
+            return (self.evaluation_function(board),action_baseline)
         for action in actions:
             # always set the board(
             board[action[0]][action[1]] = (self.player_number*2)% 3
@@ -112,7 +112,7 @@ class AIPlayer:
                 v = maxV[0]
             if v <= alpha:
                 #WE DONT NEED TO USE THIS, STOP!!!
-                board[actions[0]][actions[1]] = 0
+                board[action[0]][action[1]] = 0
                 # STOP!!! IGNORE, THIS IS THE PRUNE, NO NEED TO KEEP LOOKING!!
                 return (v, action)
             beta = min(beta, v)
@@ -125,13 +125,13 @@ class AIPlayer:
     def max_value(self, board, alpha, beta, depth):
         v = -100000000
         ExpectedMaxDepth = 2
-        if self.terminal_test(board) or depth == ExpectedMaxDepth:
-            print(self.evaluation_function(board))
-            return self.evaluation_function(board)
         # get all actions
         actions = self.actions(board)
          # set action to be the first in the array, because of the max function needs a baseline
         action_baseline = actions[0]
+        if self.terminal_test(board) or depth == ExpectedMaxDepth:
+            print(self.evaluation_function(board))
+            return (self.evaluation_function(board),action_baseline)
         for action in actions:
             # always set the board
             board[action[0]][action[1]] = self.player_number
@@ -142,7 +142,7 @@ class AIPlayer:
                 v = minV[0]
             if v >= beta:
                 #WE DONT NEED TO USE THIS, STOP!!!
-                board[actions[0]][actions[1]] = 0
+                board[action[0]][action[1]] = 0
                 # STOP!!! IGNORE, THIS IS THE PRUNE, NO NEED TO KEEP LOOKING!!
                 return (v, action)
             alpha = max(alpha, v)
