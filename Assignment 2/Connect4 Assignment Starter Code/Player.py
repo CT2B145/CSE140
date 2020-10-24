@@ -22,7 +22,7 @@ class AIPlayer:
         else:
             return -1
 
-    # Returns all possible actions 
+    # Returns all possible actions that we can take from the empty positions
     def actions(self, board):
         possibleActions = []
         cols = [0 for i in range(6)]
@@ -118,10 +118,9 @@ class AIPlayer:
          and then factors it into its calculation so this back and forth prediction keeps going till we run out of depth
 
         """
-
         # i guess do this for now until we get worse
         depth = 0 
-        # we are always going to start out with max regardless
+        # we are always going to start out with max regardless, LOOK AT THE SLIDES AND THE ALGORITHM TREE STRUCTURE
         # remember get that stupid column apparently
         return self.bestValueWalmart(board, depth, True)[1][1]
 
@@ -154,7 +153,7 @@ class AIPlayer:
             # DFS kinda of thing, 
             # three moves into the furure for example
             #take the value, evalulate function and compare
-            # also we switch functions since we are taking the avg of the two functions
+            # also we switch functions since we going back and forth on what movies the player or ai may take
             exp_v = self.bestValueWalmart(board, depth+1, False)
             if exp_v > v:
                 action_baseline = action
@@ -178,8 +177,8 @@ class AIPlayer:
             # and we factor in our calcuation here to what the opponent may think of us
             value = self.bestValueWalmart(board, depth+1, True)
              # the TA gave this to students in the Summer session apparently?
-             # , this the prob funtion
-            # each action has the same prob to be played, think of connect 4 logic   
+             # , this the prob funtion, but yea look at the slides, they make sense in this case
+            # each action has the same prob to be played, think of connect 4 logic. cuz we cannot say what exact move the person will take
             v += (1.0/(len(actions)))*value
         return v
 
@@ -192,6 +191,7 @@ class AIPlayer:
             utility += 40
         elif current == 2 and empty == 2:
             utility += 10
+        # dont want to give the enemy the advantage!!!!!!    
         if opponent == 3 and empty == 1:
             utility -= 40
         return utility
@@ -213,20 +213,22 @@ class AIPlayer:
         RETURNS:
         The utility value for the current board
         """
-
+        # basically, this is some funky math in order to get it to be the opposite everytime
+        # 2 * 2 mod 3  =1 the 1 * 2 mode 3  =  2
         # check which player we are on
         if self.player_number is 2:
             opponent_num = 1
         else: 
             opponent_num = 2
 
-       # think of windows , 4 to win
+        # think of windows , 4 to win
         # @ of alll the moves that ar possible, which are the best ones
-
         # temp place one at everyone, everytime i place the piece, im going to evalutet  what my ultiy is,
         # if i place my piece, and it reutrn connect 4 amazin move
+
+        # doing the start in the middle or stop and the middle since we go out of bounces
         ulitily = 0
-        BEST = 100000
+        BEST = 100000 # basically the best move, just return it since we WINNNNNNNNNN and nothin CAN STOP US
         # 6 rows, so check 
         for i in range(6):
             row = board[i]
@@ -240,8 +242,6 @@ class AIPlayer:
                     return (BEST)
                 else:
                     ulitily += self.check_window(me, empty, oppsite)
-
-
         # check for the columns
          # 7 col, so check 
         for i in range(7):
@@ -256,7 +256,30 @@ class AIPlayer:
                     return (BEST)
                 else:
                     ulitily += self.check_window(me, empty, oppsite)
-        
+         # uphill
+        for c in range(7-3):
+            for r in range(6-3):
+                vision = [board[r][c], board[r+1][c+1], board[r+2][c+2], board[r+3][c+3]]
+                me = vision.count(self.player_number)
+                oppsite = vision.count(opponent_num)
+                empty = vision.count(0)
+                # count the number of pucks we see so far
+                if me == 4:
+                    return (BEST)
+                else:
+                    ulitily += self.check_window(me, empty, oppsite)
+        # downhill
+        for c in range(7-3):
+            for r in range(6-3):
+                vision = [board[r][c], board[r-1][c+1], board[r-2][c+2], board[r-3][c+3]]
+                me = vision.count(self.player_number)
+                oppsite = vision.count(opponent_num)
+                empty = vision.count(0)
+                # count the number of pucks we see so far
+                if me == 4:
+                    return (BEST)
+                else:
+                    ulitily += self.check_window(me, empty, oppsite)
 
 
         return ulitily
