@@ -1,5 +1,8 @@
 import numpy as np
 
+INF = 9999999
+NEG_INF = -9999999
+
 class AIPlayer:
 
     # apparently there is a temp var we set
@@ -15,7 +18,7 @@ class AIPlayer:
     def get_closet_empty_row(self, board, col):
         # placement of where it is on the board
         row_values = list(board[:, col])
-        print(row_values, "row values")
+        # print(row_values, "row values")
         # any option not use yet
         if 0 in row_values:
             # get the row with the value in it but the position where there is a zero value
@@ -28,7 +31,7 @@ class AIPlayer:
         possibleActions = []
         # HAS TO BE COLUMN NUMBERS YOU NITWITED NINE PIN
         cols = [0, 1, 2, 3, 4, 5 ,6 ]
-        print(cols, "cols")
+        # print(cols, "cols")
         #which row is the first empty starting from the bottom
         for col in cols:
             
@@ -37,7 +40,7 @@ class AIPlayer:
             # returns value that is empty, the closest empty
             row_num = self.get_closet_empty_row(board, col)
             # well if the rows actually exists
-            print(row_num, "row_num")
+            # print(row_num, "row_num")
             if row_num != -1:
                 possibleActions.append((row_num, col))
                 #array of tuples
@@ -81,7 +84,9 @@ class AIPlayer:
         """
         Given the current state of the board, return the next move based on
         the alpha-beta pruning algorithm
+
         This will play against either itself or a human player
+
         INPUTS:
         board - a numpy array containing the state of the board using the
                 following encoding:
@@ -91,15 +96,17 @@ class AIPlayer:
                 - spaces that are unoccupied are marked as 0
                 - spaces that are occupied by player 1 have a 1 in them
                 - spaces that are occupied by player 2 have a 2 in them
+
         RETURNS:
         The 0 based index of the column that represents the next move
         """
         depth = 0
-        return self.min_value(board,10000000, -10000000, depth)[1][1]
+        action_tuple = self.max_value(board, NEG_INF, INF, depth)
+        return action_tuple[1][1]
 
     def min_value(self, board, alpha, beta, depth):
-        v = 100000000
-        ExpectedMaxDepth = 2
+        v = 999999999
+        ExpectedMaxDepth = 5
         # get all actions
         actions = self.actions(board)
          # set action to be the first in the array, because of the max function needs a baseline
@@ -129,8 +136,8 @@ class AIPlayer:
     
     
     def max_value(self, board, alpha, beta, depth):
-        v = -100000000
-        ExpectedMaxDepth = 2
+        v = -999999999
+        ExpectedMaxDepth = 5
         # get all actions
         actions = self.actions(board)
         print(actions, " max")
@@ -255,12 +262,12 @@ class AIPlayer:
     def check_window(self, current, empty, opponent):    
         utility = 0
         if current == 3 and empty == 1:
-            utility += 40
+            utility += 100
         elif current == 2 and empty == 2:
             utility += 10
         # dont want to give the enemy the advantage!!!!!!    
         if opponent == 3 and empty == 1:
-            utility -= 40
+            utility -= 100
         return utility
 
     def evaluation_function(self, board):
@@ -295,7 +302,7 @@ class AIPlayer:
 
         # doing the start in the middle or stop and the middle since we go out of bounces
         ulitily = 0
-        BEST = 100000 # basically the best move, just return it since we WINNNNNNNNNN and nothin CAN STOP US
+        BEST = 1000000000 # basically the best move, just return it since we WINNNNNNNNNN and nothin CAN STOP US
         # 6 rows, so check 
         for i in range(6):
             row = board[i]
@@ -314,7 +321,7 @@ class AIPlayer:
         for i in range(7):
             col = list(board[:, i])
             for row in range(6-3):
-                vision = list(col[row:row+4]) # we want to check right 4
+                vision = col[row:row+4] # we want to check right 4
                 me = vision.count(self.player_number)
                 oppsite = vision.count(opponent_num)
                 empty = vision.count(0)
