@@ -6,7 +6,7 @@ NEG_INF = -9999999
 class AIPlayer:
 
     # apparently there is a temp var we set
-    ExpectedMaxDepth = 4
+    ExpectedMaxDepth = 5
 
 
     def __init__(self, player_number):
@@ -106,13 +106,13 @@ class AIPlayer:
 
     def min_value(self, board, alpha, beta, depth):
         v = 999999999
-        ExpectedMaxDepth = 5
+        # ExpectedMaxDepth = 5
         # get all actions
         actions = self.actions(board)
          # set action to be the first in the array, because of the max function needs a baseline
         # print(actions, "min")
         action_baseline = actions[0]
-        if self.terminal_test(board) or depth == ExpectedMaxDepth:
+        if self.terminal_test(board) or depth == self.ExpectedMaxDepth:
             # print(self.evaluation_function(board))
             return (self.evaluation_function(board),action_baseline)
         for action in actions:
@@ -120,6 +120,7 @@ class AIPlayer:
             board[action[0]][action[1]] = (self.player_number*2)% 3
             # need to seperate since well... max() doesnt allow us to see if one is greater than other for actions
             maxV = self.max_value(board, alpha, beta, depth+1)
+            # no equals greater is needed her.... typo at first
             if (v > maxV[0]):
                 action_baseline = action
                 v = maxV[0]
@@ -137,13 +138,13 @@ class AIPlayer:
     
     def max_value(self, board, alpha, beta, depth):
         v = -999999999
-        ExpectedMaxDepth = 5
+        # ExpectedMaxDepth = 5
         # get all actions
         actions = self.actions(board)
-        print(actions, " max")
+        # print(actions, " max")
          # set action to be the first in the array, because of the max function needs a baseline
         action_baseline = actions[0]
-        if self.terminal_test(board) or depth == ExpectedMaxDepth:
+        if self.terminal_test(board) or depth == self.ExpectedMaxDepth:
             # print(self.evaluation_function(board))
             return (self.evaluation_function(board),action_baseline)
         for action in actions:
@@ -201,11 +202,15 @@ class AIPlayer:
         # raise NotImplementedError('Whoops I don\'t know what to do')
 
     def bestValueWalmart(self, board, depth, playerType):
+        
         # i was told to do this.... uhhh????
-        ExpectedMaxDepth = 2
+        # ExpectedMaxDepth = 6
         AnIdiot = True
         hammond = playerType
-        if self.terminal_test(board) or depth == ExpectedMaxDepth:
+        # maxplayer is the ai , WE WANT AI TO WIN
+        # checks if we are not at the depth or 
+        # max depth, lower the depth, the faster it runs, we set the constant
+        if self.terminal_test(board) or depth == 3:
             # print(self.evaluation_function(board))
             return self.evaluation_function(board)
         return self.expectimax_max_value(board, depth) if hammond is AnIdiot else self.expectimax_exp_value(board, depth)
@@ -256,6 +261,9 @@ class AIPlayer:
                 # , this the prob funtion, but yea look at the slides, they make sense in this case
                 # each action has the same prob to be played, think of connect 4 logic. cuz we cannot say what exact move the person will take
                 v += (1.0/(len(actions)))*value[0] # also check the type, since max returns a tuple, so get the first not the second item
+
+            # you boofoon, you forgot to add this....
+            board[action[0]][action[1]] = 0 # reset the board back
         return v
 
 
