@@ -265,6 +265,9 @@ class AIPlayer:
             utility += 100
         elif current == 2 and empty == 2:
             utility += 10
+        # fix the problem of ignore the enemy's advancment into non homesoil territory    
+        elif opponent == 2 and empty == 2:
+            utility -= 20
         # dont want to give the enemy the advantage!!!!!!    
         if opponent == 3 and empty == 1:
             utility -= 100
