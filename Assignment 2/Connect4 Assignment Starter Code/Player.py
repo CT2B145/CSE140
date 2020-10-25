@@ -110,7 +110,7 @@ class AIPlayer:
         # get all actions
         actions = self.actions(board)
          # set action to be the first in the array, because of the max function needs a baseline
-        print(actions, "min")
+        # print(actions, "min")
         action_baseline = actions[0]
         if self.terminal_test(board) or depth == ExpectedMaxDepth:
             print(self.evaluation_function(board))
@@ -120,7 +120,7 @@ class AIPlayer:
             board[action[0]][action[1]] = (self.player_number*2)% 3
             # need to seperate since well... max() doesnt allow us to see if one is greater than other for actions
             maxV = self.max_value(board, alpha, beta, depth+1)
-            if (v >= maxV[0]):
+            if (v > maxV[0]):
                 action_baseline = action
                 v = maxV[0]
             if v <= alpha:
@@ -144,14 +144,14 @@ class AIPlayer:
          # set action to be the first in the array, because of the max function needs a baseline
         action_baseline = actions[0]
         if self.terminal_test(board) or depth == ExpectedMaxDepth:
-            print(self.evaluation_function(board))
+            # print(self.evaluation_function(board))
             return (self.evaluation_function(board),action_baseline)
         for action in actions:
             # always set the board
             board[action[0]][action[1]] = self.player_number
             # need to seperate since well... max() doesnt allow us to see if one is greater than other for actions
             minV = self.min_value(board, alpha, beta, depth+1)
-            if (v <= minV[0]):
+            if (v < minV[0]):
                 action_baseline = action
                 v = minV[0]
             if v >= beta:
