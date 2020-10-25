@@ -6,7 +6,7 @@ NEG_INF = -9999999
 class AIPlayer:
 
     # apparently there is a temp var we set
-    ExpectedMaxDepth = 1
+    ExpectedMaxDepth = 4
 
 
     def __init__(self, player_number):
@@ -113,7 +113,7 @@ class AIPlayer:
         # print(actions, "min")
         action_baseline = actions[0]
         if self.terminal_test(board) or depth == ExpectedMaxDepth:
-            print(self.evaluation_function(board))
+            # print(self.evaluation_function(board))
             return (self.evaluation_function(board),action_baseline)
         for action in actions:
             # always set the board(
@@ -206,7 +206,7 @@ class AIPlayer:
         AnIdiot = True
         hammond = playerType
         if self.terminal_test(board) or depth == ExpectedMaxDepth:
-            print(self.evaluation_function(board))
+            # print(self.evaluation_function(board))
             return self.evaluation_function(board)
         return self.expectimax_max_value(board, depth) if hammond is AnIdiot else self.expectimax_exp_value(board, depth)
 
@@ -250,10 +250,12 @@ class AIPlayer:
             # value remember means the best achievable outcome from the succ
             # and we factor in our calcuation here to what the opponent may think of us
             value = self.bestValueWalmart(board, depth+1, True)
-             # the TA gave this to students in the Summer session apparently?
-             # , this the prob funtion, but yea look at the slides, they make sense in this case
-            # each action has the same prob to be played, think of connect 4 logic. cuz we cannot say what exact move the person will take
-            v += (1.0/(len(actions)))*value[0] # also check the type, since max returns a tuple, so get the first not the second item
+            #type check cuz.... sometimes it's not a tuple????
+            if type(value) is tuple:
+                # the TA gave this to students in the Summer session apparently?
+                # , this the prob funtion, but yea look at the slides, they make sense in this case
+                # each action has the same prob to be played, think of connect 4 logic. cuz we cannot say what exact move the person will take
+                v += (1.0/(len(actions)))*value[0] # also check the type, since max returns a tuple, so get the first not the second item
         return v
 
 
@@ -262,7 +264,7 @@ class AIPlayer:
     def check_window(self, current, empty, opponent):    
         utility = 0
         if current == 3 and empty == 1:
-            utility += 100
+            utility += 120
         elif current == 2 and empty == 2:
             utility += 10
         # fix the problem of ignore the enemy's advancment into non homesoil territory    
