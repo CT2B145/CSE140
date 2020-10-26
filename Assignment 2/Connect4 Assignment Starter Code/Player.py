@@ -1,12 +1,13 @@
 import numpy as np
 
+#got tired of rewriting things
 INF = 9999999
 NEG_INF = -9999999
 
 class AIPlayer:
 
     # apparently there is a temp var we set
-    ExpectedMaxDepth = 5
+    Max_Depth = 5
 
 
     def __init__(self, player_number):
@@ -14,7 +15,7 @@ class AIPlayer:
         self.type = 'ai'
         self.player_string = 'Player {}:ai'.format(player_number)
 
-    #first empty row that is nearest
+    # first empty row that is nearest
     def get_closet_empty_row(self, board, col):
         # placement of where it is on the board
         row_values = list(board[:, col])
@@ -30,7 +31,7 @@ class AIPlayer:
     def actions(self, board):
         possibleActions = []
         # HAS TO BE COLUMN NUMBERS YOU NITWITED NINE PIN
-        cols = [0, 1, 2, 3, 4, 5 ,6 ]
+        cols = np.arange(7)
         # print(cols, "cols")
         #which row is the first empty starting from the bottom
         for col in cols:
@@ -114,7 +115,7 @@ class AIPlayer:
          # set action to be the first in the array, because of the max function needs a baseline
         # print(actions, "min")
         action_baseline = actions[0]
-        if self.terminal_test(board) or depth == self.ExpectedMaxDepth:
+        if self.terminal_test(board) or depth == self.Max_Depth:
             # print(self.evaluation_function(board))
             return (self.evaluation_function(board),action_baseline)
         for action in actions:
@@ -146,7 +147,7 @@ class AIPlayer:
         # print(actions, " max")
          # set action to be the first in the array, because of the max function needs a baseline
         action_baseline = actions[0]
-        if self.terminal_test(board) or depth == self.ExpectedMaxDepth:
+        if self.terminal_test(board) or depth == self.Max_Depth:
             # print(self.evaluation_function(board))
             return (self.evaluation_function(board),action_baseline)
         for action in actions:
@@ -205,8 +206,6 @@ class AIPlayer:
 
     def bestValueWalmart(self, board, depth, playerType):
         
-        # i was told to do this.... uhhh????
-        # ExpectedMaxDepth = 6
         AnIdiot = True
         hammond = playerType
         # maxplayer is the ai , WE WANT AI TO WIN
@@ -280,6 +279,7 @@ class AIPlayer:
             utility += 200
         elif current == 2 and empty == 2:
             utility += 50
+        # avoid this situation cuz if we do it, well we NEED TO STOP IT!!    Also to stop that stupid 4 bottom condtions
         elif current == 1 and opponent == 3:
             utility += 1000
         # # fix the problem of ignore the enemy's advancment into non homesoil territory    
@@ -287,7 +287,7 @@ class AIPlayer:
         #     utility -= 20
         # dont want to give the enemy the advantage!!!!!!    
         if opponent == 3 and empty == 1:
-            utility -= 200
+            utility -= INF
         return utility
 
     def evaluation_function(self, board):
@@ -328,9 +328,9 @@ class AIPlayer:
             row = board[i]
             for col in range(7-3):
                 vision = list(row[col:col+4]) # we want to check right 4
+                empty = vision.count(0)
                 me = vision.count(self.player_number)
                 oppsite = vision.count(opponent_num)
-                empty = vision.count(0)
                 # count the number of pucks we see so far
                 if me == 4:
                     return (BEST)
@@ -342,9 +342,9 @@ class AIPlayer:
             col = list(board[:, i])
             for row in range(6-3):
                 vision = col[row:row+4] # we want to check right 4
+                empty = vision.count(0)
                 me = vision.count(self.player_number)
                 oppsite = vision.count(opponent_num)
-                empty = vision.count(0)
                 # count the number of pucks we see so far
                 if me == 4:
                     return (BEST)
@@ -354,9 +354,9 @@ class AIPlayer:
         for c in range(7-3):
             for r in range(6-3):
                 vision = [board[r][c], board[r+1][c+1], board[r+2][c+2], board[r+3][c+3]]
+                empty = vision.count(0)
                 me = vision.count(self.player_number)
                 oppsite = vision.count(opponent_num)
-                empty = vision.count(0)
                 # count the number of pucks we see so far
                 if me == 4:
                     return (BEST)
@@ -366,9 +366,9 @@ class AIPlayer:
         for c in range(7-3):
             for r in range(6-3):
                 vision = [board[r][c], board[r-1][c+1], board[r-2][c+2], board[r-3][c+3]]
+                empty = vision.count(0)
                 me = vision.count(self.player_number)
                 oppsite = vision.count(opponent_num)
-                empty = vision.count(0)
                 # count the number of pucks we see so far
                 if me == 4:
                     return (BEST)
