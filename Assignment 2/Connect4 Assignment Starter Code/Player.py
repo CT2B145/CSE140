@@ -6,7 +6,7 @@ NEG_INF = -9999999
 class AIPlayer:
 
     # apparently there is a temp var we set
-    ExpectedMaxDepth = 6
+    ExpectedMaxDepth = 5
 
 
     def __init__(self, player_number):
@@ -280,6 +280,8 @@ class AIPlayer:
             utility += 200
         elif current == 2 and empty == 2:
             utility += 50
+        elif current == 1 and opponent == 3:
+            utility += 1000
         # # fix the problem of ignore the enemy's advancment into non homesoil territory    
         # elif opponent == 2 and empty == 2:
         #     utility -= 20
