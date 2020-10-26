@@ -6,7 +6,7 @@ NEG_INF = -9999999
 class AIPlayer:
 
     # apparently there is a temp var we set
-    ExpectedMaxDepth = 5
+    ExpectedMaxDepth = 6
 
 
     def __init__(self, player_number):
@@ -101,6 +101,8 @@ class AIPlayer:
         The 0 based index of the column that represents the next move
         """
         depth = 0
+        # action_tuple = self.max_value(board, NEG_INF, INF, depth)
+        # we get the col of the action, which is the right on the tuple
         action_tuple = self.max_value(board, NEG_INF, INF, depth)
         return action_tuple[1][1]
 
@@ -270,17 +272,20 @@ class AIPlayer:
 
     #      based if this for calculations https://www.youtube.com/watch?v=y7AKtWGOPAE  
     def check_window(self, current, empty, opponent):    
+
+        # you may ask why these numbers are the best? well, it got it to be here and now its just working well lol
+        # i guess 100s or the 10s wasnt enough "change" for the algorithm
         utility = 0
         if current == 3 and empty == 1:
-            utility += 120
+            utility += 200
         elif current == 2 and empty == 2:
-            utility += 10
-        # fix the problem of ignore the enemy's advancment into non homesoil territory    
-        elif opponent == 2 and empty == 2:
-            utility -= 20
+            utility += 50
+        # # fix the problem of ignore the enemy's advancment into non homesoil territory    
+        # elif opponent == 2 and empty == 2:
+        #     utility -= 20
         # dont want to give the enemy the advantage!!!!!!    
         if opponent == 3 and empty == 1:
-            utility -= 100
+            utility -= 200
         return utility
 
     def evaluation_function(self, board):
