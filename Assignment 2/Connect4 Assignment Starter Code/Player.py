@@ -16,7 +16,7 @@ NEG_INF = -9999999
 class AIPlayer:
 
     # apparently there is a temp var we set
-    Max_Depth = 5
+    Max_Depth = 6
 
 
 
