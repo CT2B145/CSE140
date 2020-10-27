@@ -7,7 +7,8 @@ NEG_INF = -9999999
 class AIPlayer:
 
     # apparently there is a temp var we set
-    Max_Depth = 5
+    Max_Depth = 3
+
 
 
     def __init__(self, player_number):
@@ -105,7 +106,8 @@ class AIPlayer:
         # action_tuple = self.max_value(board, NEG_INF, INF, depth)
         # we get the col of the action, which is the right on the tuple
         action_tuple = self.max_value(board, NEG_INF, INF, depth)
-        return action_tuple[1][1]
+        # added none check to fix the stalemate situation (out of bounds)
+        return None if action_tuple[1] is None else action_tuple[1][1]
 
     def min_value(self, board, alpha, beta, depth):
         v = 999999999
@@ -114,7 +116,11 @@ class AIPlayer:
         actions = self.actions(board)
          # set action to be the first in the array, because of the max function needs a baseline
         # print(actions, "min")
-        action_baseline = actions[0]
+
+        # if we are out of moves and well its pretty much a stalemate
+        # if actions[0] is None:
+            # return (self.evaluation_function(board),[])
+        action_baseline = None
         if self.terminal_test(board) or depth == self.Max_Depth:
             # print(self.evaluation_function(board))
             return (self.evaluation_function(board),action_baseline)
@@ -146,7 +152,8 @@ class AIPlayer:
         actions = self.actions(board)
         # print(actions, " max")
          # set action to be the first in the array, because of the max function needs a baseline
-        action_baseline = actions[0]
+        # if actions[0] is None:
+        action_baseline = None
         if self.terminal_test(board) or depth == self.Max_Depth:
             # print(self.evaluation_function(board))
             return (self.evaluation_function(board),action_baseline)
