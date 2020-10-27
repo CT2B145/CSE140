@@ -16,7 +16,7 @@ NEG_INF = -9999999
 class AIPlayer:
 
     # apparently there is a temp var we set
-    Max_Depth = 3
+    Max_Depth = 5
 
 
 
@@ -115,6 +115,7 @@ class AIPlayer:
         depth = 0
         # action_tuple = self.max_value(board, NEG_INF, INF, depth)
         # we get the col of the action, which is the right on the tuple
+        #we start out with max cuz the algorithm is like that. Look at the slides for erfernces
         action_tuple = self.max_value(board, NEG_INF, INF, depth)
         # added none check to fix the stalemate situation (out of bounds)
         return None if action_tuple[1] is None else action_tuple[1][1]
@@ -235,6 +236,7 @@ class AIPlayer:
             return self.evaluation_function(board)
         return self.expectimax_max_value(board, depth) if hammond is AnIdiot else self.expectimax_exp_value(board, depth)
 
+    # this would be the AI
     def expectimax_max_value(self, board, depth):
         v = -999999999
         # get all actions
@@ -308,6 +310,8 @@ class AIPlayer:
         if opponent == 3 and empty == 1:
             utility -= INF
         return utility
+    # returnt he value of the item that is being placed
+    # after last move ie placed, total value of possible game win
 
     def evaluation_function(self, board):
         """
@@ -335,7 +339,7 @@ class AIPlayer:
             opponent_num = 2
 
         # think of windows , 4 to win
-        # @ of alll the moves that ar possible, which are the best ones
+        # @ of alll the moves that ar possible, which are the best ones 
         # temp place one at everyone, everytime i place the piece, im going to evalutet  what my ultiy is,
         # if i place my piece, and it reutrn connect 4 amazin move
 
