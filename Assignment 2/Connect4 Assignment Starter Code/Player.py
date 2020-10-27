@@ -1,3 +1,12 @@
+# Mitchell Pon
+# 1591702
+# Citations: https://www.youtube.com/watch?v=zp3VMe0Jpf8&t=13s, https://www.youtube.com/watch?v=MMLtza3CZFM&t=4606s , https://www.youtube.com/watch?v=l-hh51ncgDI , https://www.youtube.com/watch?v=y7AKtWGOPAE&t=972s 
+#https://courses.cs.washington.edu/courses/cse573/10au/slides/cse573-expectimax.pdf , https://cs.nyu.edu/~fergus/teaching/ai/slides/lecture7.pdf
+#
+#  Michelle Parent, a former student of this course explained a huge breakdown of how it worked. Anything that looks similar is NOT intentional. All below is self work. 
+
+
+
 import numpy as np
 
 #got tired of rewriting things
@@ -18,7 +27,7 @@ class AIPlayer:
 
     # first empty row that is nearest
     def get_closet_empty_row(self, board, col):
-        # placement of where it is on the board
+        # placement of where it is on the board, and some disgusting python shortcut i keep forgetting how it works lol
         row_values = list(board[:, col])
         # print(row_values, "row values")
         # any option not use yet
@@ -57,6 +66,7 @@ class AIPlayer:
             row = board[r]
             for c in range(7-3): # counts all the groups of 4
                 vision = list(row[c:c+4])
+                # remember player versus opponent thing here.
                 if vision.count(self.player_number) == 4 or vision.count((self.player_number * 2) % 3) == 4:
                     return True
         # up and down vertical check
@@ -179,8 +189,6 @@ class AIPlayer:
         # return self.expectimax_max_value(board, depth) if hammond is AnIdiot else self.expectimax_exp_value(board, depth)
 
 
-        raise NotImplementedError('Whoops I don\'t know what to do')
-
     def get_expectimax_move(self, board):
         """
         Given the current state of the board, return the next move based on
@@ -209,6 +217,8 @@ class AIPlayer:
         depth = 0 
         # we are always going to start out with max regardless, LOOK AT THE SLIDES AND THE ALGORITHM TREE STRUCTURE
         # remember get that stupid column apparently
+
+        # None if action_tuple[1] is None else action_tuple[1][1]
         return self.bestValueWalmart(board, depth, True)[1][1]
 
         # raise NotImplementedError('Whoops I don\'t know what to do')
