@@ -120,6 +120,7 @@ class AIPlayer:
         # if we are out of moves and well its pretty much a stalemate
         # if actions[0] is None:
             # return (self.evaluation_function(board),[])
+        # added none to fix the stalemate situation (out of bounds), other it would throw exception
         action_baseline = None
         if self.terminal_test(board) or depth == self.Max_Depth:
             # print(self.evaluation_function(board))
@@ -153,6 +154,7 @@ class AIPlayer:
         # print(actions, " max")
          # set action to be the first in the array, because of the max function needs a baseline
         # if actions[0] is None:
+        # added none to fix the stalemate situation (out of bounds), other it would throw exception
         action_baseline = None
         if self.terminal_test(board) or depth == self.Max_Depth:
             # print(self.evaluation_function(board))
