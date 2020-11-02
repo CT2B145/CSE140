@@ -16,91 +16,62 @@ def make_maze(n: int,  x: int ):
     return maze
 
 # check if we can actually add this value to the graph, cuz it may not be possible iwth length
-def impossibleYes(curr_node, length):
-    if curr_node[0] < 0 or curr_node[1] < 0:
+def in_bounds(node, n):
+    if node[0] < 0 or node[1] < 0:
         return False
-    if curr_node[0] >= length or curr_node[1] >= length:
+    if node[0] >= n or node[1] >= n:
         return False
     return True
 
-
-def solve_maze(board,length: int):
-
-    frontier = []
-    explored = []
-    # dist =  np.empty((length, length))
-    dist = [None] * length
-    for i in range(length):
-        dist[i] = [None] * length
+def solve_maze(rjm_array, n):
+    '''finds the distance array of an rjm'''
+    #init dist array
+    dist = [None] * n
+    for i in range(n):
+        dist[i] = [None] * n
     dist[0][0] = 0
     depth = 0
-
-    # frontier.append(board[0][0])
-    while True:
-        connected_nodes = []
-        # if frontier is None:
-        #     break;
-
-        # current_node = frontier.pop(0)
-        # if current_node not in explored:
-            # explored.append(current_node)
-        #get the front node
+    print("step 1")
+    # print_arr(dist)
+    while True: 
+        farthest = []
+        
         #do an iterative search to find nodes farthest traveled
-        for r in range(length):
-            for c in range(length):
+        for r in range(n):
+            for c in range(n):
                 if dist[r][c] == depth:
-                    connected_nodes.append((r, c))
-        if len(connected_nodes) == 0:
-            break 
-        #handling the stupid tuple and checking the children
-        # check if the child? nodes are in this. Return the child node if it is, or at least add it 
-        print("HASMMOND!", connected_nodes)
-        for node in (connected_nodes):
-            curr_node = connected_nodes.pop()
-            jump_dist = board[curr_node[0]][curr_node[1]] # get the array cube's value we are on now to do the jump
-            # check the jumps
+                    farthest.append((r, c))
+        
+        if len(farthest) == 0:
+            break
+        #go thru list of farthest nodes and travel 1 more.
+        for i in range(len(farthest)):
+            curr_node = farthest.pop()
+            jump_dist = rjm_array[curr_node[0]][curr_node[1]]
             up = (curr_node[0] - jump_dist, curr_node[1])
             down = (curr_node[0] + jump_dist, curr_node[1])
             left = (curr_node[0], curr_node[1] - jump_dist)
             right = (curr_node[0], curr_node[1] + jump_dist)
-
-
+           
             # if the jump is valid and we haven't visited it yet, set the depth to be + 1
-            if impossibleYes(up,length):
+            if in_bounds(up, n):
                 if dist[up[0]][up[1]] is None:
                     dist[up[0]][up[1]] = depth + 1
-            if impossibleYes(down, length):
+            if in_bounds(down, n):
                 if dist[down[0]][down[1]] is None:
                     dist[down[0]][down[1]] = depth + 1
-            if impossibleYes(left, length):
+            if in_bounds(left, n):
                 if dist[left[0]][left[1]] is None:
                     dist[left[0]][left[1]] = depth + 1
-            if impossibleYes(right, length):
+            if in_bounds(right, n):
                 if dist[right[0]][right[1]] is None:
                     dist[right[0]][right[1]] = depth + 1
-            # print(dist)
-            depth+=1
-            # if node not in frontier or node.ID not in explored:
-            #     frontier.append(node)
-
-            # again based off the psuedocode
-            # print(frontier, "        explore:", explored)
-            # children = [i for i, item in enumerate(current_node.connected_nodes) if item[0] == node]
-            # if children == True:
-            #     explored.append(children)
-            # else:
-            #     explored[children[0].ID] = (node, current_node)
-            #     break
-                # explored.append(node.ID)
-            # as per psuedo code
-            # # if node not in frontier or node.ID not in explored:
-            #     # add to frontier before checking if children are the end result. Otherwise the node will not be added to explore.
-            #     frontier.append(node)
-            #     if node.ID == goal_node:
-            #         # explored.append(node.ID)
-            #         break
-
+        print("depth "+str(depth))
+        # print_arr(dist)
+        depth+=1
+    
     return dist
+
 
 
 
