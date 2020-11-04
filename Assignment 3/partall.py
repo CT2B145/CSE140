@@ -84,7 +84,8 @@ the_input = input("Rook Jumping Maze size (5-10)?: ")
 # stupid casting lol, other it gives type errors
 grant = make_maze(int(the_input),int(the_input))
 print(grant)
-print(solve_maze(grant, int(the_input)))
+part2= np.frombuffer(solve_maze(grant, int(the_input)))
+print(part2)
 
 
 #knapsack problem?
