@@ -16,62 +16,67 @@ def make_maze(n: int,  x: int ):
     return maze
 
 # check if we can actually add this value to the graph, cuz it may not be possible iwth length
-def in_bounds(node, n):
-    if node[0] < 0 or node[1] < 0:
+def impossibleYes(curr_node, length):
+    if curr_node[0] < 0 or curr_node[1] < 0:
         return False
-    if node[0] >= n or node[1] >= n:
+    if curr_node[0] >= length or curr_node[1] >= length:
         return False
     return True
 
-def solve_maze(rjm_array, n):
-    '''finds the distance array of an rjm'''
-    #init dist array
-    dist = [None] * n
-    for i in range(n):
-        dist[i] = [None] * n
+
+def solve_maze(board,length: int):
+
+    # frontier = []
+    # explored = []
+    # dist =  np.empty((length, length))
+    dist = [None] * length
+    for i in range(length):
+        dist[i] = [None] * length
     dist[0][0] = 0
     depth = 0
-    print("step 1")
-    # print_arr(dist)
-    while True: 
-        farthest = []
-        
+    print(dist)
+    # frontier.append(board[0][0])
+    while True:
+        connected_nodes = []
+      
         #do an iterative search to find nodes farthest traveled
-        for r in range(n):
-            for c in range(n):
+        for r in range(length):
+            for c in range(length):
                 if dist[r][c] == depth:
-                    farthest.append((r, c))
-        
-        if len(farthest) == 0:
-            break
-        #go thru list of farthest nodes and travel 1 more.
-        for i in range(len(farthest)):
-            curr_node = farthest.pop()
-            jump_dist = rjm_array[curr_node[0]][curr_node[1]]
+                    connected_nodes.append((r, c))
+        if len(connected_nodes) == 0:
+            break 
+        #handling the stupid tuple and checking the children
+        # check if the child? nodes are in this. Return the child node if it is, or at least add it 
+        print("HASMMOND!", connected_nodes)
+        for i in range(len(connected_nodes)):
+        # for i in range(len(connected_nodes)):
+            curr_node = connected_nodes.pop()
+            jump_dist = board[curr_node[0]][curr_node[1]] # get the array cube's value we are on now to do the jump
+            # check the jumps
             up = (curr_node[0] - jump_dist, curr_node[1])
             down = (curr_node[0] + jump_dist, curr_node[1])
             left = (curr_node[0], curr_node[1] - jump_dist)
             right = (curr_node[0], curr_node[1] + jump_dist)
-           
+
+
             # if the jump is valid and we haven't visited it yet, set the depth to be + 1
-            if in_bounds(up, n):
+            if impossibleYes(up,length):
                 if dist[up[0]][up[1]] is None:
                     dist[up[0]][up[1]] = depth + 1
-            if in_bounds(down, n):
+            if impossibleYes(down, length):
                 if dist[down[0]][down[1]] is None:
                     dist[down[0]][down[1]] = depth + 1
-            if in_bounds(left, n):
+            if impossibleYes(left, length):
                 if dist[left[0]][left[1]] is None:
                     dist[left[0]][left[1]] = depth + 1
-            if in_bounds(right, n):
+            if impossibleYes(right, length):
                 if dist[right[0]][right[1]] is None:
                     dist[right[0]][right[1]] = depth + 1
-        print("depth "+str(depth))
-        # print_arr(dist)
+            # print(dist)
         depth+=1
-    
-    return dist
 
+    return dist
 
 
 
