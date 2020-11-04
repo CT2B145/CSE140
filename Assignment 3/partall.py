@@ -23,6 +23,13 @@ def impossibleYes(curr_node, length):
         return False
     return True
 
+def get_score(part2: list,n:int):
+    print(part2)
+    # score = np.sum(grant)
+    if None is part2[n-1][n-1]:
+        return 10000000
+    return part2[n-1][n-1] * -1
+
 
 def solve_maze(board,length: int):
 
@@ -74,6 +81,7 @@ def solve_maze(board,length: int):
                 if dist[right[0]][right[1]] is None:
                     dist[right[0]][right[1]] = depth + 1
             # print(dist)
+        
         depth+=1
 
     return dist
@@ -83,9 +91,19 @@ def solve_maze(board,length: int):
 the_input = input("Rook Jumping Maze size (5-10)?: ")
 # stupid casting lol, other it gives type errors
 grant = make_maze(int(the_input),int(the_input))
+
+
+
 print(grant)
-part2= np.frombuffer(solve_maze(grant, int(the_input)))
+
+
+part2= np.array(solve_maze(grant, int(the_input)))
 print(part2)
+
+print(get_score(part2,int(the_input)))
+
+
+
 
 
 #knapsack problem?
