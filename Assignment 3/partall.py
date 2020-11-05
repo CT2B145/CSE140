@@ -272,6 +272,57 @@ def hill_climb5(board, length, iterations:int, probability: float):
         # i+=1
 
     return best_board
+def hill_climb6(board, length, iterations:int, temp: float, decay: float):
+    ''' j =  board that is randomly generated
+        j' = that is randomly generated, the orignal board that is changed with one single cell
+        step = function to chose one cell in j to change
+        this is wherere one cell is picked randomly out of j (not goal) than placed with a new number
+
+        e = the item where we would compare for the min
+        moves previous j vs now j'
+
+   '''
+    i = 0
+   #numpy to make things a bit easier
+    part2= np.array(solve_maze(board, length))
+    score_best = get_score(part2,int(the_input))
+    # score_je = get_score(part2,int(the_input))
+    best_board = board
+    boardJ = board
+    # print(part2)
+    # print(get_score(part2,int(the_input)))
+    temptemp = temp
+
+    for i in range(iterations):
+         # #change the board apparently 
+
+
+        # prev_board, calc
+        curr_board = boardJ
+        j_s = np.array(solve_maze(curr_board, length))
+        score_e = get_score(j_s,int(the_input))
+        
+        randomCol = random.randint(0,length-1)
+        randomRow = random.randint(0,length-1)
+        
+        # calculate the new board
+        new_board_cell = generate_randomRange(randomCol, randomRow,length)
+        boardJ[randomCol][randomRow] = new_board_cell
+        j_s = np.array(solve_maze(boardJ, length))
+        # energy function
+        score_je = get_score(j_s,int(the_input))
+
+        # compare the values of the board new vs old
+        if score_e <= score_je or probability > random.randfloat(0,1):
+            board = boardJ
+            if score_e <= score_best:
+                best_board = boardJ
+
+        print(i)
+        # i+=1
+        temptemp = temptemp*decay #where d is the iteration temperature decay
+
+    return best_board
 
 # part 1
 the_input = input("Rook Jumping Maze size (5-10)?: ")
@@ -311,14 +362,26 @@ print(get_score(part2,int(the_input)))
 # print(get_score(part4,int(the_input)))
 
 
-# part 5
-probability = input("Uphill step probability?: ")
+# # part 5
+# probability = input("Uphill step probability?: ")
+# # new board that is is placed with x random changes and y searches
+# board_J = hill_climb5(grant,n, int(iterations), float(probability))
+# part4= np.array(solve_maze(board_J, int(the_input)))
+# print(part4)
+# print_arr(part4)
+# print(get_score(part4,int(the_input)))
+
+
+# part 6
+temp = input("Initial temperature?: ")
+decay = input("Decay rate?: ")
 # new board that is is placed with x random changes and y searches
-board_J = hill_climb5(grant,n, int(iterations), float(probability))
+board_J = hill_climb6(grant,n, int(iterations), float(temp), float(decay))
 part4= np.array(solve_maze(board_J, int(the_input)))
 print(part4)
 print_arr(part4)
 print(get_score(part4,int(the_input)))
+
 
 
 #knapsack problem?
