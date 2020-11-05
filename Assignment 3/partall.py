@@ -124,11 +124,7 @@ def hill_climbStoich(board, length, iterations:int):
         e = the item where we would compare for the min
         moves previous j vs now j'
 
-
-
    '''
-
-
     i = 0
    #numpy to make things a bit easier
     part2= np.array(solve_maze(board, length))
@@ -168,100 +164,64 @@ def hill_climbStoich(board, length, iterations:int):
 
     return best_board
 
+def hill_climb4(board, length, iterations:int):
+    ''' j =  board that is randomly generated
+        j' = that is randomly generated, the orignal board that is changed with one single cell
+        step = function to chose one cell in j to change
+        this is wherere one cell is picked randomly out of j (not goal) than placed with a new number
+
+        e = the item where we would compare for the min
+        moves previous j vs now j'
+
+   '''
+    i = 0
+   #numpy to make things a bit easier
+    part2= np.array(solve_maze(board, length))
+    score_best = get_score(part2,int(the_input))
+    score_je = get_score(part2,int(the_input))
+    best_board = board
+    boardJ = board
+    # print(part2)
+    # print(get_score(part2,int(the_input)))
+
+    for i in range(iterations):
+         # #change the board apparently 
 
 
+        # prev_board, calc
+        curr_board = boardJ
+        j_s = np.array(solve_maze(curr_board, length))
+        score_e = get_score(j_s,int(the_input))
+        
+        randomCol = random.randint(0,length-1)
+        randomRow = random.randint(0,length-1)
+        
+        # calculate the new board
+        new_board_cell = generate_randomRange(randomCol, randomRow,length)
+        boardJ[randomCol][randomRow] = new_board_cell
+        j_s = np.array(solve_maze(boardJ, length))
+        score_je = get_score(j_s,int(the_input))
 
-# def hill_climbSL(board, length, iterations):
-#    ''' j =  board that is randomly generated
-#         j' = that is randomly generated, the orignal board that is changed with one single cell
-#         step = function to chose one cell in j to change
-#         this is wherere one cell is picked randomly out of j (not goal) than placed with a new number
+        # compare the values of the board new vs old
+        if score_e <= score_je:
+            board = boardJ
+            if score_e <= score_best:
+                best_board = boardJ
 
-#         e = the item where we would compare for the min
-#         moves previous j vs now j'
+        print(i)
+        # i+=1
 
-
-
-#    '''
-#     # frontier = []
-#     # explored = []
-#     dist =  np.empty((length, length))
-#     dist = [None] * length
-#     for i in range(length):
-#         dist[i] = [None] * length
-#     dist[0][0] = 0
-#     depth = 0
-#     print(dist)
-#     # frontier.append(board[0][0])
-#     while True:
-#         connected_nodes = []
-      
-#         #do an iterative search to find nodes farthest traveled
-#         for r in range(length):
-#             for c in range(length):
-#                 #find the nodes that have the next depth, so we can check them
-#                 # and then visit them to keep checking their possible succ
-#                 if dist[r][c] == depth:
-#                     connected_nodes.append((r, c))
-#         if len(connected_nodes) == 0:
-#             break 
-#         #handling the stupid tuple and checking the children
-#         # check if the child? nodes are in this. Return the child node if it is, or at least add it 
-#         print("HASMMOND!", connected_nodes)
-
-#         #look at all the successors and ssing where there possible lengths go and then adding them to the dist board
-#         for i in range(len(connected_nodes)):
-#         # for i in range(len(connected_nodes)):
-#             curr_node = connected_nodes.pop()
-#             jump_dist = board[curr_node[0]][curr_node[1]] # get the array cube's value we are on now to do the jump
-
-#             # #change the board apparently 
-#             # prev_board_cell = jump_dist
-#             # boardJ = board
-#             # randomCol = random.randint(0,length-1)
-#             # randomRow = random.randint(0,length-1)
-
-#             # new_board_cell = generate_randomRange(randomCol, randomRow,length)
-#             # boardJ[randomCol][randomRow] = new_board_cell
-
-#             # new_jump_dist = board[curr_node[0]][curr_node[1]] # get the array cube's value we are on now to do the jump
-            
-            
-#             # # check the jumps
-#             # up = (curr_node[0] - jump_dist, curr_node[1])
-#             # down = (curr_node[0] + jump_dist, curr_node[1])
-#             # left = (curr_node[0], curr_node[1] - jump_dist)
-#             # right = (curr_node[0], curr_node[1] + jump_dist)
-
-
-#             # if the jump is valid and we haven't visited it yet, set the depth to be + 1
-#             # each step is +1
-#             if impossibleYes(up,length):
-#                 if dist[up[0]][up[1]] is None:
-#                     dist[up[0]][up[1]] = depth + 1
-#             if impossibleYes(down, length):
-#                 if dist[down[0]][down[1]] is None:
-#                     dist[down[0]][down[1]] = depth + 1
-#             if impossibleYes(left, length):
-#                 if dist[left[0]][left[1]] is None:
-#                     dist[left[0]][left[1]] = depth + 1
-#             if impossibleYes(right, length):
-#                 if dist[right[0]][right[1]] is None:
-#                     dist[right[0]][right[1]] = depth + 1
-#             # print(dist)
-#         # increase the depth for the next interation if there is one from the placement above
-#         depth+=1
-
-#     return dist
-
-
-
-#     return
+    return best_board
 
 # part 1
 the_input = input("Rook Jumping Maze size (5-10)?: ")
 # stupid casting lol, other it gives type errors
-grant = make_maze(int(the_input),int(the_input))
+# grant = make_maze(int(the_input),int(the_input))
+grant = np.array([[1, 4, 2, 2, 2,],[3, 2, 1, 3, 3],[2, 2, 1 ,2 ,2], [3, 1, 2, 2, 4], [1, 4 ,2 ,3 ,0]])
+# 3 2 1 3 3
+# 2 2 1 2 2
+# 3 1 2 2 4
+# 1 4 2 3 0
 print(grant)
 
 # part 2
