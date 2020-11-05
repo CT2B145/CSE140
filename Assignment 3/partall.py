@@ -14,6 +14,23 @@ def make_maze(n: int,  x: int ):
             maze[i][j]= random.randint(min1,max1)
     maze[n-1][x-1] = 0
     return maze
+def print_arr(board):
+    n = len(board)
+    niceBoard = " "
+    #not sure why the heck its off by one? but ok?????
+    for r in range(n):
+        for c in range(n-1):
+            if board[r][c] is None:
+                niceBoard += "-- "
+            else:
+                #remember to case
+                niceBoard += str(board[r][c]) + "  " 
+        if board[r][n-1] is None:
+            niceBoard += "--\n "
+        else:
+            # end of the line buddy
+            niceBoard += str(board[r][n-1]) + "\n "
+    print(niceBoard)
 
 # check if we can actually add this value to the graph, cuz it may not be possible iwth length
 def impossibleYes(curr_node, length):
@@ -251,13 +268,16 @@ print(grant)
 part2= np.array(solve_maze(grant, int(the_input)))
 print(part2)
 print(get_score(part2,int(the_input)))
+print_arr(part2)
+n = int(the_input) 
 
-n = int(the_input)
+
 # part 3
 iterations = input("Iterations?: ")
 board_J = hill_climbStoich(grant,n, int(iterations))
 part2= np.array(solve_maze(board_J, int(the_input)))
 print(part2)
+print_arr(part2)
 print(get_score(part2,int(the_input)))
 
 
