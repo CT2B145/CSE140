@@ -129,7 +129,7 @@ def hill_climbStoich(board, length, iterations:int):
    #numpy to make things a bit easier
     part2= np.array(solve_maze(board, length))
     score_best = get_score(part2,int(the_input))
-    score_je = get_score(part2,int(the_input))
+    # score_je = get_score(part2,int(the_input))
     best_board = board
     boardJ = board
     # print(part2)
@@ -151,6 +151,7 @@ def hill_climbStoich(board, length, iterations:int):
         new_board_cell = generate_randomRange(randomCol, randomRow,length)
         boardJ[randomCol][randomRow] = new_board_cell
         j_s = np.array(solve_maze(boardJ, length))
+        # energy function
         score_je = get_score(j_s,int(the_input))
 
         # compare the values of the board new vs old
@@ -164,7 +165,7 @@ def hill_climbStoich(board, length, iterations:int):
 
     return best_board
 
-def hill_climb4(board, length, iterations:int):
+def hill_climb4(board, length, iterations:int, searches: int):
     ''' j =  board that is randomly generated
         j' = that is randomly generated, the orignal board that is changed with one single cell
         step = function to chose one cell in j to change
@@ -178,38 +179,48 @@ def hill_climb4(board, length, iterations:int):
    #numpy to make things a bit easier
     part2= np.array(solve_maze(board, length))
     score_best = get_score(part2,int(the_input))
-    score_je = get_score(part2,int(the_input))
     best_board = board
+
+
+    # intialize the board
     boardJ = board
+
+
+
     # print(part2)
     # print(get_score(part2,int(the_input)))
+    for j in range(searches):
+        for i in range(iterations):
+            # #change the board apparently 
 
-    for i in range(iterations):
-         # #change the board apparently 
 
+            # prev_board, calc
+            curr_board = boardJ
+            j_s = np.array(solve_maze(curr_board, length))
+            # energy function
+            score_e = get_score(j_s,int(the_input))
+            
+            randomCol = random.randint(0,length-1)
+            randomRow = random.randint(0,length-1)
+            
+            # calculate the new board
+            new_board_cell = generate_randomRange(randomCol, randomRow,length)
+            boardJ[randomCol][randomRow] = new_board_cell
+            j_s = np.array(solve_maze(boardJ, length))
+            score_je = get_score(j_s,int(the_input))
 
-        # prev_board, calc
-        curr_board = boardJ
-        j_s = np.array(solve_maze(curr_board, length))
-        score_e = get_score(j_s,int(the_input))
-        
-        randomCol = random.randint(0,length-1)
-        randomRow = random.randint(0,length-1)
-        
-        # calculate the new board
-        new_board_cell = generate_randomRange(randomCol, randomRow,length)
-        boardJ[randomCol][randomRow] = new_board_cell
-        j_s = np.array(solve_maze(boardJ, length))
-        score_je = get_score(j_s,int(the_input))
+            # compare the values of the board new vs old
+            if score_e <= score_je:
+                board = boardJ
+                if score_e <= score_best:
+                    best_board = boardJ
 
-        # compare the values of the board new vs old
-        if score_e <= score_je:
-            board = boardJ
-            if score_e <= score_best:
-                best_board = boardJ
-
-        print(i)
-        # i+=1
+            print(i)
+            # i+=1
+        # Let j be chosen at random
+        boardJ = make_maze(length, length)
+        part2= np.array(solve_maze(boardJ, length))
+        score_je = get_score(part2,int(the_input))
 
     return best_board
 
@@ -234,12 +245,21 @@ n = int(the_input)
 
 # part 3
 iterations = input("Iterations?: ")
+# new board that is is placed with x random changes
 board_J = hill_climbStoich(grant,n, int(iterations))
 part2= np.array(solve_maze(board_J, int(the_input)))
 print(part2)
 print_arr(part2)
 print(get_score(part2,int(the_input)))
 
+# part 4
+searches = input("Hill descents?: ")
+# new board that is is placed with x random changes and y searches
+board_J = hill_climb4(grant,n, int(iterations), int(searches))
+part4= np.array(solve_maze(board_J, int(the_input)))
+print(part4)
+print_arr(part4)
+print(get_score(part4,int(the_input)))
 
 
 #knapsack problem?
