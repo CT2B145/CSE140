@@ -137,10 +137,14 @@ def hill_climbStoich(board, length, iterations:int):
     # print(part2)
     # print(get_score(part2,int(the_input)))
 
-
+    # while
     randomCol = random.randint(0,length-1)
     randomRow = random.randint(0,length-1)
 
+    while (randomCol == length-1 and randomRow == length-1):
+        randomCol = random.randint(0,length-1)
+        randomRow = random.randint(0,length-1)
+    
     for i in range(iterations):
          # #change the board apparently 
 
@@ -253,6 +257,12 @@ def hill_climb5(board, length, iterations:int, probability: float):
     randomCol = random.randint(0,length-1)
     randomRow = random.randint(0,length-1)
 
+
+    while (randomCol == length-1 and randomRow == length-1):
+        randomCol = random.randint(0,length-1)
+        randomRow = random.randint(0,length-1)
+    
+
     for i in range(iterations):
          # #change the board apparently 
 
@@ -306,6 +316,15 @@ def hill_climb6(board, length, iterations:int, temp: float, decay: float):
     # print(get_score(part2,int(the_input)))
     temptemp = temp
 
+
+    randomCol = random.randint(0,length-1)
+    randomRow = random.randint(0,length-1)
+
+    while (randomCol == length-1 and randomRow == length-1):
+        randomCol = random.randint(0,length-1)
+        randomRow = random.randint(0,length-1)
+    
+
     for i in range(iterations):
          # #change the board apparently 
 
@@ -315,8 +334,8 @@ def hill_climb6(board, length, iterations:int, temp: float, decay: float):
         j_s = np.array(solve_maze(curr_board, length))
         score_e = get_score(j_s,int(length))
         
-        randomCol = random.randint(0,length-1)
-        randomRow = random.randint(0,length-1)
+        # randomCol = random.randint(0,length-1)
+        # randomRow = random.randint(0,length-1)
         
         # calculate the new board
         new_board_cell = generate_randomRange(randomCol, randomRow,length)
@@ -326,7 +345,7 @@ def hill_climb6(board, length, iterations:int, temp: float, decay: float):
         score_je = get_score(j_s,int(length))
         workyouuselessmachine = random.uniform(0,1)
         # compare the values of the board new vs old
-        if score_e <= score_je or ( workyouuselessmachine > math.exp((score_e-score_je)/temptemp)):
+        if score_e <= score_je or ( workyouuselessmachine > np.exp((score_e-score_je)/temptemp)):
             curr_board = boardJ
             if score_je <= score_best:
                 best_board = boardJ
@@ -342,12 +361,12 @@ def hill_climb6(board, length, iterations:int, temp: float, decay: float):
 the_input = input("Rook Jumping Maze size (5-10)?: ")
 # stupid casting lol, other it gives type errors
 # grant = make_maze(int(the_input),int(the_input))
-grant = np.array([[1, 4, 2, 2, 2,],[3, 2, 1, 3, 3],[2, 2, 1 ,2 ,2], [3, 1, 2, 2, 4], [1, 4 ,2 ,3 ,0]])
+# grant = np.array([[1, 4, 2, 2, 2,],[3, 2, 1, 3, 3],[2, 2, 1 ,2 ,2], [3, 1, 2, 2, 4], [1, 4 ,2 ,3 ,0]])
 # part 5
 # grant = np.array([[1, 4, 3, 1, 1,],[3, 2, 3, 2, 1],[2, 2, 1 ,3 ,1], [2, 1, 3, 2, 1], [1, 4 ,1 ,4 ,0]])
 
 #part 6 check
-# grant = np.array([[1, 3, 1, 3, 3,],[4, 3, 3, 2, 4],[1, 1, 2 ,3 ,2], [2, 3, 2, 2, 4], [3, 1 ,4 ,2 ,0]])
+grant = np.array([[1, 3, 1, 3, 3,],[4, 3, 3, 2, 4],[1, 1, 2 ,3 ,2], [2, 3, 2, 2, 4], [3, 1 ,4 ,2 ,0]])
 # 3 2 1 3 3
 # 2 2 1 2 2
 # 3 1 2 2 4
@@ -363,13 +382,13 @@ n = int(the_input)
 
 
 # part 3
-iterations = input("Iterations?: ")
-# new board that is is placed with x random changes
-board_J = hill_climbStoich(grant,int(n), int(iterations))
-part2= np.array(solve_maze(board_J, int(the_input)))
-print(part2)
-print_arr(part2)
-print(get_score(part2,int(the_input)))
+# iterations = input("Iterations?: ")
+# # new board that is is placed with x random changes
+# board_J = hill_climbStoich(grant,int(n), int(iterations))
+# part2= np.array(solve_maze(board_J, int(the_input)))
+# print(part2)
+# print_arr(part2)
+# print(get_score(part2,int(the_input)))
 
 # part 4
 # searches = input("Hill descents?: ")
@@ -395,15 +414,15 @@ print(get_score(part2,int(the_input)))
 
 
 # part 6
-# iterations = input("Iterations?: ")
-# temp = input("Initial temperature?: ")
-# decay = input("Decay rate?: ")
-# # new board that is is placed with x random changes and y searches
-# board_J = hill_climb6(grant,int(n), int(iterations), float(temp), float(decay))
-# part4= np.array(solve_maze(board_J, int(the_input)))
-# print(part4)
-# print_arr(part4)
-# print(get_score(part4,int(the_input)))
+iterations = input("Iterations?: ")
+temp = input("Initial temperature?: ")
+decay = input("Decay rate?: ")
+# new board that is is placed with x random changes and y searches
+board_J = hill_climb6(grant,int(n), int(iterations), float(temp), float(decay))
+part4= np.array(solve_maze(board_J, int(the_input)))
+print(part4)
+print_arr(part4)
+print(get_score(part4,int(the_input)))
 
 
 
