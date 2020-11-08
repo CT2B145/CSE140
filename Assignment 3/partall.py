@@ -342,12 +342,12 @@ def hill_climb6(board, length, iterations:int, temp: float, decay: float):
 the_input = input("Rook Jumping Maze size (5-10)?: ")
 # stupid casting lol, other it gives type errors
 # grant = make_maze(int(the_input),int(the_input))
-# grant = np.array([[1, 4, 2, 2, 2,],[3, 2, 1, 3, 3],[2, 2, 1 ,2 ,2], [3, 1, 2, 2, 4], [1, 4 ,2 ,3 ,0]])
+grant = np.array([[1, 4, 2, 2, 2,],[3, 2, 1, 3, 3],[2, 2, 1 ,2 ,2], [3, 1, 2, 2, 4], [1, 4 ,2 ,3 ,0]])
 # part 5
 # grant = np.array([[1, 4, 3, 1, 1,],[3, 2, 3, 2, 1],[2, 2, 1 ,3 ,1], [2, 1, 3, 2, 1], [1, 4 ,1 ,4 ,0]])
 
 #part 6 check
-grant = np.array([[1, 3, 1, 3, 3,],[4, 3, 3, 2, 4],[1, 1, 2 ,3 ,2], [2, 3, 2, 2, 4], [3, 1 ,4 ,2 ,0]])
+# grant = np.array([[1, 3, 1, 3, 3,],[4, 3, 3, 2, 4],[1, 1, 2 ,3 ,2], [2, 3, 2, 2, 4], [3, 1 ,4 ,2 ,0]])
 # 3 2 1 3 3
 # 2 2 1 2 2
 # 3 1 2 2 4
