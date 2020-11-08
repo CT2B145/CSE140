@@ -133,20 +133,23 @@ def hill_climbStoich(board, length, iterations:int):
     # score_je = get_score(part2,int(the_input))
     best_board = board
     boardJ = board
+    curr_board = board
     # print(part2)
     # print(get_score(part2,int(the_input)))
+
+
+    randomCol = random.randint(0,length-1)
+    randomRow = random.randint(0,length-1)
 
     for i in range(iterations):
          # #change the board apparently 
 
 
         # prev_board, calc
-        curr_board = boardJ
+        # curr_board = boardJ
         j_s = np.array(solve_maze(curr_board, length))
         score_e = get_score(j_s,int(the_input))
-        
-        randomCol = random.randint(0,length-1)
-        randomRow = random.randint(0,length-1)
+    
         
         # calculate the new board
         new_board_cell = generate_randomRange(randomCol, randomRow,length)
@@ -157,9 +160,10 @@ def hill_climbStoich(board, length, iterations:int):
 
         # compare the values of the board new vs old
         if score_e <= score_je:
-            board = boardJ
-            if score_e <= score_best:
+            curr_board = boardJ
+            if score_je <= score_best:
                 best_board = boardJ
+                score_best = score_je
 
         print(i)
         # i+=1
@@ -237,7 +241,7 @@ def hill_climb5(board, length, iterations:int, probability: float):
     i = 0
    #numpy to make things a bit easier
     part2= np.array(solve_maze(board, length))
-    score_best = get_score(part2,int(the_input))
+    score_best = get_score(part2,int(length))
     # score_je = get_score(part2,int(the_input))
     best_board = board
     boardJ = board
@@ -254,7 +258,7 @@ def hill_climb5(board, length, iterations:int, probability: float):
         # prev_board, calc
         # curr_board = board
         j_s = np.array(solve_maze(curr_board, length))
-        score_e = get_score(j_s,int(the_input))
+        score_e = get_score(j_s,int(length))
         
         # randomCol = random.randint(0,length-1)
         # randomRow = random.randint(0,length-1)
@@ -274,7 +278,7 @@ def hill_climb5(board, length, iterations:int, probability: float):
                 best_board = boardJ
                 score_best = score_je
 
-        print(i)
+        # print(i)
         # i+=1
 
     return best_board
@@ -324,7 +328,7 @@ def hill_climb6(board, length, iterations:int, temp: float, decay: float):
             if score_e <= score_best:
                 best_board = boardJ
 
-        print(i)
+        # print(i)
         # i+=1
         temptemp = temptemp*decay #where d is the iteration temperature decay
 
@@ -334,9 +338,9 @@ def hill_climb6(board, length, iterations:int, temp: float, decay: float):
 the_input = input("Rook Jumping Maze size (5-10)?: ")
 # stupid casting lol, other it gives type errors
 # grant = make_maze(int(the_input),int(the_input))
-# grant = np.array([[1, 4, 2, 2, 2,],[3, 2, 1, 3, 3],[2, 2, 1 ,2 ,2], [3, 1, 2, 2, 4], [1, 4 ,2 ,3 ,0]])
+grant = np.array([[1, 4, 2, 2, 2,],[3, 2, 1, 3, 3],[2, 2, 1 ,2 ,2], [3, 1, 2, 2, 4], [1, 4 ,2 ,3 ,0]])
 # part 5
-grant = np.array([[1, 4, 3, 1, 1,],[3, 2, 3, 2, 1],[2, 2, 1 ,3 ,1], [2, 1, 3, 2, 1], [1, 4 ,1 ,4 ,0]])
+# grant = np.array([[1, 4, 3, 1, 1,],[3, 2, 3, 2, 1],[2, 2, 1 ,3 ,1], [2, 1, 3, 2, 1], [1, 4 ,1 ,4 ,0]])
 
 #part 6 check
 # grant = np.array([[1, 3, 1, 3, 3,],[4, 3, 3, 2, 4],[1, 1, 2 ,3 ,2], [2, 3, 2, 2, 4], [3, 1 ,4 ,2 ,0]])
@@ -355,13 +359,13 @@ n = int(the_input)
 
 
 # part 3
-# iterations = input("Iterations?: ")
-# # new board that is is placed with x random changes
-# board_J = hill_climbStoich(grant,int(n), int(iterations))
-# part2= np.array(solve_maze(board_J, int(the_input)))
-# print(part2)
-# print_arr(part2)
-# print(get_score(part2,int(the_input)))
+iterations = input("Iterations?: ")
+# new board that is is placed with x random changes
+board_J = hill_climbStoich(grant,int(n), int(iterations))
+part2= np.array(solve_maze(board_J, int(the_input)))
+print(part2)
+print_arr(part2)
+print(get_score(part2,int(the_input)))
 
 # part 4
 # searches = input("Hill descents?: ")
@@ -375,14 +379,15 @@ n = int(the_input)
 
 # # part 5
 
-iterations = input("Iterations?: ")
-probability = input("Uphill step probability?: ")
-# new board that is is placed with x random changes and y searches
-board_J = hill_climb5(grant,n, int(iterations), float(probability))
-part4= np.array(solve_maze(board_J, int(the_input)))
-print(part4)
-print_arr(part4)
-print(get_score(part4,int(the_input)))
+# iterations = input("Iterations?: ")
+# probability = input("Uphill step probability?: ")
+# # new board that is is placed with x random changes and y searches
+# board_J = hill_climb5(grant,n, int(iterations), float(probability))
+# part4= np.array(solve_maze(board_J, n))
+# print(part4)
+# print_arr(part4)
+# print(get_score(part4,int(the_input)))
+# print(int(the_input))
 
 
 # part 6
