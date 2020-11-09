@@ -163,7 +163,7 @@ def hill_climbStoich(board, length, iterations:int):
         score_je = get_score(j_s,int(the_input))
 
         # compare the values of the board new vs old
-        if score_e <= score_je:
+        if score_je <= score_e:
             curr_board = boardJ
             if score_je <= score_best:
                 best_board = boardJ
@@ -187,7 +187,7 @@ def hill_climb4(board, length, iterations:int, searches: int):
     i = 0
    #numpy to make things a bit easier
     part2= np.array(solve_maze(board, length))
-    score_best = get_score(part2,int(the_input))
+    score_best = get_score(part2,length)
     best_board = board
     curr_board = board
 
@@ -195,8 +195,8 @@ def hill_climb4(board, length, iterations:int, searches: int):
     boardJ = board
 
 
-    randomCol = random.randint(0,length-1)
-    randomRow = random.randint(0,length-1)
+    # randomCol = random.randint(0,length-1)
+    # randomRow = random.randint(0,length-1)
     # print(part2)
     # print(get_score(part2,int(the_input)))
     for j in range(searches):
@@ -205,10 +205,10 @@ def hill_climb4(board, length, iterations:int, searches: int):
 
 
             # prev_board, calc
-            curr_board = boardJ
+            # curr_board = boardJ
             j_s = np.array(solve_maze(curr_board, length))
             # energy function
-            score_e = get_score(j_s,int(the_input))
+            score_e = get_score(j_s,length)
             
             randomCol = random.randint(0,length-1)
             randomRow = random.randint(0,length-1)
@@ -217,21 +217,17 @@ def hill_climb4(board, length, iterations:int, searches: int):
             new_board_cell = generate_randomRange(randomCol, randomRow,length)
             boardJ[randomCol][randomRow] = new_board_cell
             j_s = np.array(solve_maze(boardJ, length))
-            score_je = get_score(j_s,int(the_input))
+            score_je = get_score(j_s,length)
 
-            # compare the values of the board new vs old
-        if score_je <=  score_e:
-            curr_board = boardJ
-            if score_je <= score_best:
-                best_board = boardJ
-                score_best = score_je
+                # compare the values of the board new vs old
+            if score_je <=  score_e:
+                curr_board = boardJ
+                if score_je <= score_best:
+                    best_board = boardJ
+                    score_best = score_je
 
             print(i)
             # i+=1
-        # Let j be chosen at random
-        boardJ = make_maze(length, length)
-        part2= np.array(solve_maze(boardJ, length))
-        score_je = get_score(part2,int(the_input))
 
     return best_board
 def hill_climb5(board, length, iterations:int, probability: float):
@@ -284,11 +280,17 @@ def hill_climb5(board, length, iterations:int, probability: float):
         score_je = get_score(j_s,int(length))
 
         # compare the values of the board new vs old
-        if score_je <=  score_e or probability > random.uniform(0,1):
+        if score_je <=  score_e:
             curr_board = boardJ
             if score_je <= score_best:
                 best_board = boardJ
                 score_best = score_je
+        elif probability > random.uniform(0,1):
+            curr_board = boardJ
+            if score_je <= score_best:
+                best_board = boardJ
+                score_best = score_je
+
 
         # print(i)
         # i+=1
@@ -343,9 +345,14 @@ def hill_climb6(board, length, iterations:int, temp: float, decay: float):
         j_s = np.array(solve_maze(boardJ, length))
         # energy function
         score_je = get_score(j_s,int(length))
-        workyouuselessmachine = random.uniform(0,1)
+        workyouuselessmachine = random.uniform(0,1) # not probablity
         # compare the values of the board new vs old
-        if score_e <= score_je or ( workyouuselessmachine > np.exp((score_e-score_je)/temptemp)):
+        if score_e <= score_je:
+            curr_board = boardJ
+            if score_je <= score_best:
+                best_board = boardJ
+                score_best = score_je
+        elif (workyouuselessmachine < np.exp((score_e-score_je)/temptemp)):
             curr_board = boardJ
             if score_je <= score_best:
                 best_board = boardJ
@@ -362,6 +369,11 @@ the_input = input("Rook Jumping Maze size (5-10)?: ")
 # stupid casting lol, other it gives type errors
 # grant = make_maze(int(the_input),int(the_input))
 # grant = np.array([[1, 4, 2, 2, 2,],[3, 2, 1, 3, 3],[2, 2, 1 ,2 ,2], [3, 1, 2, 2, 4], [1, 4 ,2 ,3 ,0]])
+
+
+# part 4
+# grant = np.array([[2, 1, 1, 4, 3],[2, 2, 3, 1, 4],[3, 2, 2 ,3 ,3], [3, 3, 1, 1, 3], [4, 1 ,3 ,4 ,0]])
+
 # part 5
 # grant = np.array([[1, 4, 3, 1, 1,],[3, 2, 3, 2, 1],[2, 2, 1 ,3 ,1], [2, 1, 3, 2, 1], [1, 4 ,1 ,4 ,0]])
 
@@ -391,6 +403,7 @@ n = int(the_input)
 # print(get_score(part2,int(the_input)))
 
 # part 4
+# iterations = input("Iterations?: ")
 # searches = input("Hill descents?: ")
 # # new board that is is placed with x random changes and y searches
 # board_J = hill_climb4(grant,n, int(iterations), int(searches))
