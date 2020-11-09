@@ -1,7 +1,8 @@
 import numpy as np
 import sys
 import math
-import random 
+import random
+import copy
 
  
 def make_maze(n: int,  x: int ):
@@ -245,9 +246,9 @@ def hill_climb5(board, length, iterations:int, probability: float):
     part2= np.array(solve_maze(board, length))
     score_best = get_score(part2,int(length))
     # score_je = get_score(part2,int(the_input))
-    best_board = board.deepcopy()
-    boardJ = board.deepcopy()
-    curr_board = board.deepcopy()
+    best_board = copy.deepcopy(board)
+    boardJ = copy.deepcopy(board)
+    curr_board = copy.deepcopy(board)
     # print(part2)
     # print(get_score(part2,int(the_input)))
     randomCol = random.randint(0,length-1)
@@ -286,15 +287,17 @@ def hill_climb5(board, length, iterations:int, probability: float):
 
         # compare the values of the board new vs old
         if score_je <=  score_e:
-            curr_board = boardJ.deepcopy()
+            curr_board = copy.deepcopy(boardJ)
             if score_je <= score_best:
-                best_board = boardJ.deepcopy()
+                best_board = copy.deepcopy(boardJ)
                 score_best = score_je
         elif probability > random.uniform(0,1):
-            curr_board = boardJ.deepcopy()
+            curr_board = copy.deepcopy(boardJ)
             if score_je <= score_best:
-                best_board = boardJ.deepcopy()
+                best_board = copy.deepcopy(boardJ)
                 score_best = score_je
+        else:
+            board_J = copy. deepcopy(curr_board)
 
 
         # print(i)

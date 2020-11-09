@@ -2,6 +2,7 @@ import numpy as np
 import sys
 import math
 import random 
+import copy
 
  
 def make_maze(n: int,  x: int ):
@@ -188,11 +189,14 @@ def hill_climb4(board, length, iterations:int, searches: int):
    #numpy to make things a bit easier
     part2= np.array(solve_maze(board, length))
     score_best = get_score(part2,length)
-    best_board = board.deepcopy()
-    curr_board = board.deepcopy()
-
+    best_board = copy.deepcopy(board)
+    
     # intialize the board
-    boardJ = board.deepcopy()
+    boardJ = copy.deepcopy(board)
+    curr_board = copy.deepcopy(board)
+
+    
+    # boardJ = board.deepcopy()
 
 
     # randomCol = random.randint(0,length-1)
@@ -203,7 +207,7 @@ def hill_climb4(board, length, iterations:int, searches: int):
         # randomCol = random.randint(0,length-1)
         # randomRow = random.randint(0,length-1)
         grant = make_maze(length,length)
-        curr_board = grant.deepcopy()
+        curr_board = copy.deepcopy(grant)
         # part2= np.array(solve_maze(board, length))
         for i in range(iterations):
             # #change the board apparently 
@@ -230,12 +234,13 @@ def hill_climb4(board, length, iterations:int, searches: int):
 
                 # compare the values of the board new vs old
             if score_je <=  score_e:
-                curr_board = boardJ.deepcopy()
+                curr_board = copy.deepcopy(boardJ)
                 if score_je <= score_best:
-                    best_board = boardJ.deepcopy()
+                    best_board = copy.deepcopy(boardJ)
                     score_best = score_je
+       
             else:
-                boardJ = curr_board.deepcopy()
+                board_J = copy.deepcopy(curr_board)
 
             # print(i)
             # i+=1

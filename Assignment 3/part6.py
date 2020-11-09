@@ -2,6 +2,7 @@ import numpy as np
 import sys
 import math
 import random 
+import copy
 
  
 def make_maze(n: int,  x: int ):
@@ -311,9 +312,9 @@ def hill_climb6(board, length, iterations:int, temp: float, decay: float):
     part2= np.array(solve_maze(board, length))
     score_best = get_score(part2,int(the_input))
     # score_je = get_score(part2,int(the_input))
-    best_board = board.deepcopy()
-    boardJ = board.deepcopy()
-    curr_board = board.deepcopy()
+    best_board = copy.copy(board)
+    boardJ = copy.copy(board)
+    curr_board = copy.deepcopy(board)
     # print(part2)
     # print(get_score(part2,int(the_input)))
     temptemp = temp
@@ -329,7 +330,7 @@ def hill_climb6(board, length, iterations:int, temp: float, decay: float):
         # curr_board = boardJ
         j_s = np.array(solve_maze(curr_board, length))
         score_e = get_score(j_s,int(length))
-        print_arr(j_s)
+        # print_arr(j_s)
 
         randomCol = random.randint(0,length-1)
         randomRow = random.randint(0,length-1)
@@ -350,22 +351,22 @@ def hill_climb6(board, length, iterations:int, temp: float, decay: float):
         # compare the values of the board new vs old
         # print(score_e, score_je, score_best)
         if score_je <= score_e:
-            curr_board = boardJ.deepcopy()
+            curr_board = copy.deepcopy(boardJ)
             if score_je <= score_best:
-                print("best", score_e, score_je, score_best)
-                best_board = boardJ.deepcopy()
+                # print("best", score_e, score_je, score_best)
+                best_board = copy.deepcopy(boardJ)
                 score_best = score_je
 
         elif (workyouuselessmachine < math.exp((score_e-score_je)/temptemp)):
-            curr_board = boardJ.deepcopy()
+            curr_board = copy.deepcopy(boardJ)
 
-            print(score_e, score_je, score_best)
+            # print(score_e, score_je, score_best)
             if score_je <= score_best:
-                print("best", score_e, score_je, score_best)
-                best_board = boardJ.deepcopy()
+                # print("best", score_e, score_je, score_best)
+                best_board = copy.deepcopy(boardJ)
                 score_best = score_je
         else: # revert the board
-            boardJ = curr_board.deepcopy()
+            boardJ = copy.deepcopy(curr_board)
 
         # print(i)
         # i+=1
@@ -447,7 +448,7 @@ decay = input("Decay rate?: ")
 # new board that is is placed with x random changes and y searches
 board_J = hill_climb6(grant,int(n), int(iterations), float(temp), float(decay))
 part4= np.array(solve_maze(board_J, int(the_input)))
-print_arr(part4)
+print_arr(grant)
 
 print("Moves from start:")
 print_arr(part4)

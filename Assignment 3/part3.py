@@ -2,6 +2,7 @@ import numpy as np
 import sys
 import math
 import random 
+import copy
 
  
 def make_maze(n: int,  x: int ):
@@ -131,9 +132,9 @@ def hill_climbStoich(board, length, iterations:int):
     part2= np.array(solve_maze(board, length))
     score_best = get_score(part2,int(the_input))
     # score_je = get_score(part2,int(the_input))
-    best_board = board.deepcopy()
-    boardJ = board.deepcopy()
-    curr_board = board.deepcopy()
+    best_board = copy.deepcopy(board)
+    boardJ = copy.deepcopy(board)
+    curr_board = copy.deepcopy(board)
     # print(part2)
     # print(get_score(part2,int(the_input)))
 
@@ -171,12 +172,12 @@ def hill_climbStoich(board, length, iterations:int):
 
         # compare the values of the board new vs old
         if score_je <= score_e:
-            curr_board = boardJ.deepcopy()
+            curr_board = copy.deepcopy(boardJ)
             if score_je <= score_best:
-                best_board = boardJ.deepcopy()
+                best_board = copy.deepcopy(boardJ)
                 score_best = score_je
         else:
-            boardJ = curr_board.deepcopy()
+            boardJ = copy.deepcopy(curr_board)
 
         # print_arr(curr_board)
         # i+=1
