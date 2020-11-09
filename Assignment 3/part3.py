@@ -131,19 +131,19 @@ def hill_climbStoich(board, length, iterations:int):
     part2= np.array(solve_maze(board, length))
     score_best = get_score(part2,int(the_input))
     # score_je = get_score(part2,int(the_input))
-    best_board = board
-    boardJ = board
-    curr_board = board
+    best_board = board.deepcopy()
+    boardJ = board.deepcopy()
+    curr_board = board.deepcopy()
     # print(part2)
     # print(get_score(part2,int(the_input)))
 
-    # while
-    randomCol = random.randint(0,length-1)
-    randomRow = random.randint(0,length-1)
+    # # while
+    # randomCol = random.randint(0,length-1)
+    # randomRow = random.randint(0,length-1)
 
-    while (randomCol == length-1 and randomRow == length-1):
-        randomCol = random.randint(0,length-1)
-        randomRow = random.randint(0,length-1)
+    # while (randomCol == length-1 and randomRow == length-1):
+    #     randomCol = random.randint(0,length-1)
+    #     randomRow = random.randint(0,length-1)
     
     for i in range(iterations):
          # #change the board apparently 
@@ -153,7 +153,14 @@ def hill_climbStoich(board, length, iterations:int):
         # curr_board = boardJ
         j_s = np.array(solve_maze(curr_board, length))
         score_e = get_score(j_s,int(the_input))
-    
+
+        #  while
+        randomCol = random.randint(0,length-1)
+        randomRow = random.randint(0,length-1)
+
+        while (randomCol == length-1 and randomRow == length-1):
+            randomCol = random.randint(0,length-1)
+            randomRow = random.randint(0,length-1)
         
         # calculate the new board
         new_board_cell = generate_randomRange(randomCol, randomRow,length)
@@ -164,10 +171,12 @@ def hill_climbStoich(board, length, iterations:int):
 
         # compare the values of the board new vs old
         if score_je <= score_e:
-            curr_board = boardJ
+            curr_board = boardJ.deepcopy()
             if score_je <= score_best:
-                best_board = boardJ
+                best_board = boardJ.deepcopy()
                 score_best = score_je
+        else:
+            boardJ = curr_board.deepcopy()
 
         # print_arr(curr_board)
         # i+=1
@@ -367,8 +376,8 @@ def hill_climb6(board, length, iterations:int, temp: float, decay: float):
 # part 1
 the_input = input("Rook Jumping Maze size (5-10)?: ")
 # stupid casting lol, other it gives type errors
-grant = make_maze(int(the_input),int(the_input))
-# grant = np.array([[1, 4, 2, 2, 2,],[3, 2, 1, 3, 3],[2, 2, 1 ,2 ,2], [3, 1, 2, 2, 4], [1, 4 ,2 ,3 ,0]])
+# grant = make_maze(int(the_input),int(the_input))
+grant = np.array([[1, 4, 2, 2, 2,],[3, 2, 1, 3, 3],[2, 2, 1 ,2 ,2], [3, 1, 2, 2, 4], [1, 4 ,2 ,3 ,0]])
 
 
 # part 4
