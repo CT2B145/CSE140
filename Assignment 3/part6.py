@@ -419,28 +419,30 @@ n = int(the_input)
 
 # # part 5
 
-iterations = input("Iterations?: ")
-probability = input("Uphill step probability?: ")
-# new board that is is placed with x random changes and y searches
-board_J = hill_climb5(grant,n, int(iterations), float(probability))
-part4= np.array(solve_maze(board_J, n))
-print_arr(part4)
-print("Moves from start:")
+# iterations = input("Iterations?: ")
+# probability = input("Uphill step probability?: ")
+# # new board that is is placed with x random changes and y searches
+# board_J = hill_climb5(grant,n, int(iterations), float(probability))
+# part4= np.array(solve_maze(board_J, n))
 # print_arr(part4)
-print(get_score(part4,int(the_input)))
+# print("Moves from start:")
+# # print_arr(part4)
+# print(get_score(part4,int(the_input)))
 # print(int(the_input))
 
 
 # part 6
-# iterations = input("Iterations?: ")
-# temp = input("Initial temperature?: ")
-# decay = input("Decay rate?: ")
-# # new board that is is placed with x random changes and y searches
-# board_J = hill_climb6(grant,int(n), int(iterations), float(temp), float(decay))
-# part4= np.array(solve_maze(board_J, int(the_input)))
-# print(part4)
-# print_arr(part4)
-# print(get_score(part4,int(the_input)))
+iterations = input("Iterations?: ")
+temp = input("Initial temperature?: ")
+decay = input("Decay rate?: ")
+# new board that is is placed with x random changes and y searches
+board_J = hill_climb6(grant,int(n), int(iterations), float(temp), float(decay))
+part4= np.array(solve_maze(board_J, int(the_input)))
+print_arr(part4)
+
+print("Moves from start:")
+print_arr(part4)
+print(get_score(part4,int(the_input)))
 
 
 
